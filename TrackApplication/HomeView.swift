@@ -1,10 +1,3 @@
-//
-//  HomeView.swift
-//  TrackApplication
-//
-//  Created by Kalp Ostawal on 12/22/24.
-//
-
 import SwiftUI
 import FirebaseAuth
 
@@ -24,6 +17,7 @@ struct HomeView: View {
             }
             .padding()
         }
+        .navigationTitle("Home")
     }
 
     func logOut() {
@@ -35,6 +29,8 @@ struct HomeView: View {
     }
 }
 
-#Preview{
-    HomeView()
+
+
+#Preview {
+   TabbedView()
 }
