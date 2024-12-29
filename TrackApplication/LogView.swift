@@ -49,7 +49,7 @@ struct TabbedView: View {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
-            
+                .environmentObject(logDataModel)
             // Pass the instance of logDataModel to LogView using environmentObject
             LogView()
                 .tabItem {
@@ -74,6 +74,4 @@ struct TabbedView: View {
 }
 
 
-#Preview {
-    TabbedView()
-}
+
