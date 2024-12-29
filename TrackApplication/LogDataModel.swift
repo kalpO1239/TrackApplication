@@ -1,18 +1,21 @@
-//
-//  LogDataModel.swift
-//  TrackApplication
-//
-//  Created by Kalp Ostawal on 12/28/24.
-//
-
-
 import Foundation
+
+// Log data structure
+struct Log: Identifiable {
+    let id = UUID() // Unique identifier for each log
+    let date: Date
+    let title: String
+    let miles: Double
+    let timeInMinutes: Int
+}
 
 // Log data model
 class LogDataModel: ObservableObject {
-    @Published var logs: [(date: Date, miles: Double)] = []
+    @Published var logs: [Log] = []
     
-    func addLog(date: Date, miles: Double) {
-        logs.append((date: date, miles: miles))
+    /// Adds a new log entry
+    func addLog(date: Date, miles: Double, title: String, timeInMinutes: Int) {
+        let newLog = Log(date: date, title: title, miles: miles, timeInMinutes: timeInMinutes)
+        logs.append(newLog)
     }
 }

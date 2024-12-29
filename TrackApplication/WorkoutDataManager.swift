@@ -14,14 +14,26 @@ class WorkoutDataManager {
     
     private init() {}
     
-    private var workoutData: [(miles: Double, time: Double)] = []
+    // Updated workout data structure
+    private var workoutData: [Workout] = []
     
-    func addWorkout(miles: Double, time: Double) {
-        workoutData.append((miles, time))
+    /// Adds a new workout
+    func addWorkout(date: Date, miles: Double, title: String, timeInMinutes: Int) {
+        let newWorkout = Workout(date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
+        workoutData.append(newWorkout)
         //NotificationCenter.default.post(name: .workoutDataUpdated, object: nil)
     }
     
-    func getWorkoutData() -> [(miles: Double, time: Double)] {
+    /// Retrieves all workout data
+    func getWorkoutData() -> [Workout] {
         return workoutData
     }
+}
+
+/// Workout data structure
+struct Workout {
+    let date: Date
+    let miles: Double
+    let title: String
+    let timeInMinutes: Int
 }

@@ -1,3 +1,10 @@
+//
+//  GraphViewController.swift
+//  TrackApplication
+//
+//  Created by Kalp Ostawal on 12/28/24.
+//
+
 import UIKit
 import SwiftUI
 import Charts
@@ -11,13 +18,8 @@ class GraphViewController: UIViewController {
         LogEntry(date: "2024-12-30", value: 25)
     ]
     
-    // Chart view
-    private var chartView: UIView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Setup the chart view
         setupChart()
     }
     
@@ -25,11 +27,12 @@ class GraphViewController: UIViewController {
         // Create a SwiftUI view for the chart
         let chart = Chart {
             ForEach(logEntries, id: \.date) { entry in
-                BarMark(
+                LineMark(
                     x: .value("Date", entry.date),
                     y: .value("Value", entry.value)
                 )
-                .foregroundStyle(.blue) // Customize the bar color
+                .symbol(Circle()) // Add data point markers
+                .foregroundStyle(.blue) // Customize line color
             }
         }
         .frame(height: 300)
@@ -39,7 +42,9 @@ class GraphViewController: UIViewController {
         
         // Add the hosting controller to the view hierarchy
         hostingController.view.frame = CGRect(x: 20, y: 100, width: self.view.bounds.width - 40, height: 300)
-        self.view.addSubview(hostingController.view)
+        addChild(hostingController)
+        view.addSubview(hostingController.view)
+        hostingController.didMove(toParent: self)
     }
 }
 

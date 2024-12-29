@@ -1,42 +1,72 @@
 import SwiftUI
 
-
-
 struct LogView: View {
+    @State private var title: String = ""
     @State private var miles: String = ""
     @State private var hours: String = ""
     @State private var minutes: String = ""
-    @State private var seconds: String = ""
+    @State private var date: Date = Date() // Add state for the date
     
-    @EnvironmentObject var logDataModel: LogDataModel // Use @EnvironmentObject instead of @ObservedObject
+    @EnvironmentObject var logDataModel: LogDataModel // Use @EnvironmentObject
     
     var body: some View {
-        VStack {
-            TextField("Enter Miles", text: $miles)
-            // Your other log inputs here...
+        VStack(spacing: 20) {
+            Text("Log Your Workout")
+                .font(.title)
+                .bold()
             
+            // Title input
+            TextField("Enter Title", text: $title)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+            
+            // Miles input
+            TextField("Enter Miles", text: $miles)
+                .keyboardType(.decimalPad)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+            
+            // Hours input
+            HStack {
+                TextField("Hours", text: $hours)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                TextField("Minutes", text: $minutes)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .padding()
+            
+            // Date picker
+            DatePicker("Select Date", selection: $date, displayedComponents: [.date])
+                .datePickerStyle(.graphical)
+                .padding()
+            
+            // Submit button
             Button(action: handleSubmit) {
                 Text("Submit Log")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
             }
+            .padding(.horizontal)
         }
+        .padding()
     }
     
     func handleSubmit() {
         guard let miles = Double(miles) else { return }
+        guard let minutes = Int(minutes), let hours = Int(hours) else { return }
         
-        // You can add other information like time or description if necessary
-        let currentDate = Date()
+        let totalTime = hours * 60 + minutes // Calculate total minutes
         
         // Add the new log data to the shared model
-        logDataModel.addLog(date: currentDate, miles: miles)
+        logDataModel.addLog(date: date, miles: miles, title: title, timeInMinutes: totalTime)
     }
 }
-
-
-
-
-
-
 
 struct TabbedView: View {
     // Create an instance of LogDataModel
@@ -68,10 +98,3 @@ struct TabbedView: View {
         }
     }
 }
-
-#Preview {
-    TabbedView()
-}
-
-
-
