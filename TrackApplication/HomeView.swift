@@ -21,13 +21,10 @@ struct HomeView: View {
     }
 
     func logOut() {
-        do {
-            try Auth.auth().signOut() // Firebase sign-out
-        } catch {
-            print("Error signing out: \(error.localizedDescription)")
-        }
+        FirebaseAuthManager.shared.logOut()
     }
 }
+
 
 
 
