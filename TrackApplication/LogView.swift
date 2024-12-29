@@ -6,6 +6,7 @@ struct LogView: View {
     @State private var hours: String = ""
     @State private var minutes: String = ""
     @State private var date: Date = Date() // Add state for the date
+    @State private var isCalendarVisible: Bool = false // Track calendar visibility
     
     @EnvironmentObject var logDataModel: LogDataModel // Use @EnvironmentObject
     
@@ -38,10 +39,21 @@ struct LogView: View {
             }
             .padding()
             
-            // Date picker
-            DatePicker("Select Date", selection: $date, displayedComponents: [.date])
-                .datePickerStyle(.graphical)
-                .padding()
+            // Toggle Calendar Button
+            Button(action: {
+                isCalendarVisible.toggle() // Toggle the calendar visibility
+            }) {
+                Text(isCalendarVisible ? "Hide Calendar" : "Show Calendar")
+                    .foregroundColor(.blue)
+            }
+            .padding()
+            
+            // Conditionally show the DatePicker based on isCalendarVisible state
+            if isCalendarVisible {
+                DatePicker("Select Date", selection: $date, displayedComponents: [.date])
+                    .datePickerStyle(.graphical)
+                    .padding()
+            }
             
             // Submit button
             Button(action: handleSubmit) {
@@ -80,7 +92,7 @@ struct TabbedView: View {
                     Text("Home")
                 }
                 .environmentObject(logDataModel)
-            // Pass the instance of logDataModel to LogView using environmentObject
+            
             LogView()
                 .tabItem {
                     Image(systemName: "pencil.circle.fill")
@@ -88,7 +100,6 @@ struct TabbedView: View {
                 }
                 .environmentObject(logDataModel) // Inject the instance of LogDataModel into the environment
             
-            // Pass the instance of logDataModel to GraphView using environmentObject
             GraphView()
                 .tabItem {
                     Image(systemName: "chart.bar.fill")
