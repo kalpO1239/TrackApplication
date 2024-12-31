@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var password: String = ""
     @State private var errorMessage: String?
     @State private var isUserLoggedIn = false
+    @State private var isNavigatingToCreateAccount = false // Navigation to the CreateAccountView
 
     var body: some View {
         NavigationView {
@@ -15,7 +16,7 @@ struct ContentView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 50, height: 50)
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color.blue.opacity(0.6))
                     .padding(.bottom, 20)
 
                 Text("Welcome Back!")
@@ -47,19 +48,23 @@ struct ContentView: View {
                     Text("Sign In")
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.blue)
+                        .background(Color.blue.opacity(0.6))
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
                 .padding(.bottom, 20)
 
-                Button(action: createAccount) {
-                    Text("Create Account")
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                NavigationLink(destination: CreateAccountView(), isActive: $isNavigatingToCreateAccount) {
+                    Button(action: {
+                        isNavigatingToCreateAccount = true
+                    }) {
+                        Text("Create Account")
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue.opacity(0.6))
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
                 }
                 .padding(.bottom, 20)
 
@@ -86,16 +91,6 @@ struct ContentView: View {
         }
     }
 
-    func createAccount() {
-        FirebaseAuthManager.shared.createAccount(email: email, password: password) { result, error in
-            if let error = error {
-                errorMessage = "Account creation failed: \(error.localizedDescription)"
-            } else {
-                isUserLoggedIn = true
-            }
-        }
-    }
-
     func signInWithGoogle() {
         FirebaseAuthManager.shared.signInWithGoogle { success, error in
             if success {
@@ -106,7 +101,6 @@ struct ContentView: View {
         }
     }
 }
-
 #Preview{
     ContentView()
 }

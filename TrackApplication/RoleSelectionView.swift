@@ -43,7 +43,7 @@ struct RoleSelectionView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.blue.opacity(0.8)) // Light blue
+                .background(Color.blue.opacity(0.6)) // Light blue
                 .cornerRadius(10)
             }
         }
