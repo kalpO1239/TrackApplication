@@ -25,7 +25,7 @@ struct GoogleSignInButton: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(Color.red)
+            .background(Color.gray)
             .cornerRadius(8)
         }
     }
