@@ -33,6 +33,29 @@
 		9B0517762D18F28F00ECCA06 /* FirebaseVertexAI in Frameworks */ = {isa = PBXBuildFile; productRef = 9B0517752D18F28F00ECCA06 /* FirebaseVertexAI */; };
 		9B0517792D18F35900ECCA06 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 9B0517782D18F35900ECCA06 /* GoogleSignIn */; };
 		9B05177B2D18F35900ECCA06 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9B05177A2D18F35900ECCA06 /* GoogleSignInSwift */; };
+		9B32DDDF2D261073006A7918 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B32DDC52D261073006A7918 /* Preview Assets.xcassets */; };
+		9B32DDE02D261073006A7918 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B32DDD02D261073006A7918 /* GoogleService-Info.plist */; };
+		9B32DDE12D261073006A7918 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B32DDC82D261073006A7918 /* Assets.xcassets */; };
+		9B32DDE22D261073006A7918 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD42D261073006A7918 /* GroupDetailView.swift */; };
+		9B32DDE32D261073006A7918 /* StudentCatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDB2D261073006A7918 /* StudentCatalogView.swift */; };
+		9B32DDE42D261073006A7918 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCC2D261073006A7918 /* ContentView.swift */; };
+		9B32DDE52D261073006A7918 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCE2D261073006A7918 /* DashboardView.swift */; };
+		9B32DDE62D261073006A7918 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD52D261073006A7918 /* HomeView.swift */; };
+		9B32DDE72D261073006A7918 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCD2D261073006A7918 /* CreateAccountView.swift */; };
+		9B32DDE82D261073006A7918 /* RoleSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDA2D261073006A7918 /* RoleSelectionView.swift */; };
+		9B32DDE92D261073006A7918 /* AssignmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCA2D261073006A7918 /* AssignmentDetailView.swift */; };
+		9B32DDEA2D261073006A7918 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD32D261073006A7918 /* GraphViewController.swift */; };
+		9B32DDEB2D261073006A7918 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD72D261073006A7918 /* LogView.swift */; };
+		9B32DDEC2D261073006A7918 /* CoachLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCB2D261073006A7918 /* CoachLogin.swift */; };
+		9B32DDED2D261073006A7918 /* AssignmentCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDC92D261073006A7918 /* AssignmentCreationView.swift */; };
+		9B32DDEE2D261073006A7918 /* PriorAssignmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD92D261073006A7918 /* PriorAssignmentsView.swift */; };
+		9B32DDEF2D261073006A7918 /* WorkoutDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDD2D261073006A7918 /* WorkoutDataManager.swift */; };
+		9B32DDF02D261073006A7918 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */; };
+		9B32DDF12D261073006A7918 /* LogDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD62D261073006A7918 /* LogDataModel.swift */; };
+		9B32DDF22D261073006A7918 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD22D261073006A7918 /* GraphView.swift */; };
+		9B32DDF32D261073006A7918 /* TrackApplicationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDC2D261073006A7918 /* TrackApplicationApp.swift */; };
+		9B32DDF42D261073006A7918 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD82D261073006A7918 /* LogViewController.swift */; };
+		9B32DDF52D261073006A7918 /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,24 +79,30 @@
 		9B0517112D18F03200ECCA06 /* TrackApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B0517212D18F03300ECCA06 /* TrackApplicationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackApplicationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B05172B2D18F03300ECCA06 /* TrackApplicationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackApplicationUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B32DDC52D261073006A7918 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9B32DDC82D261073006A7918 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9B32DDC92D261073006A7918 /* AssignmentCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentCreationView.swift; sourceTree = "<group>"; };
+		9B32DDCA2D261073006A7918 /* AssignmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentDetailView.swift; sourceTree = "<group>"; };
+		9B32DDCB2D261073006A7918 /* CoachLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachLogin.swift; sourceTree = "<group>"; };
+		9B32DDCC2D261073006A7918 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		9B32DDCD2D261073006A7918 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
+		9B32DDCE2D261073006A7918 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
+		9B32DDD02D261073006A7918 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInButton.swift; sourceTree = "<group>"; };
+		9B32DDD22D261073006A7918 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		9B32DDD32D261073006A7918 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
+		9B32DDD42D261073006A7918 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
+		9B32DDD52D261073006A7918 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		9B32DDD62D261073006A7918 /* LogDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDataModel.swift; sourceTree = "<group>"; };
+		9B32DDD72D261073006A7918 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
+		9B32DDD82D261073006A7918 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
+		9B32DDD92D261073006A7918 /* PriorAssignmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorAssignmentsView.swift; sourceTree = "<group>"; };
+		9B32DDDA2D261073006A7918 /* RoleSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleSelectionView.swift; sourceTree = "<group>"; };
+		9B32DDDB2D261073006A7918 /* StudentCatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentCatalogView.swift; sourceTree = "<group>"; };
+		9B32DDDC2D261073006A7918 /* TrackApplicationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackApplicationApp.swift; sourceTree = "<group>"; };
+		9B32DDDD2D261073006A7918 /* WorkoutDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		9B32DDC02D260F5A006A7918 /* Exceptions for "New Group" folder in "TrackApplicationTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"TrackApplication/GoogleService-Info.plist",
-			);
-			target = 9B0517202D18F03300ECCA06 /* TrackApplicationTests */;
-		};
-		9B32DDC12D260F5A006A7918 /* Exceptions for "New Group" folder in "TrackApplicationUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"TrackApplication/GoogleService-Info.plist",
-			);
-			target = 9B05172A2D18F03300ECCA06 /* TrackApplicationUITests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9B0517242D18F03300ECCA06 /* TrackApplicationTests */ = {
@@ -84,15 +113,6 @@
 		9B05172E2D18F03300ECCA06 /* TrackApplicationUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackApplicationUITests;
-			sourceTree = "<group>";
-		};
-		9B32DDA62D260F5A006A7918 /* New Group */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				9B32DDC02D260F5A006A7918 /* Exceptions for "New Group" folder in "TrackApplicationTests" target */,
-				9B32DDC12D260F5A006A7918 /* Exceptions for "New Group" folder in "TrackApplicationUITests" target */,
-			);
-			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -151,7 +171,7 @@
 		9B0517082D18F03200ECCA06 = {
 			isa = PBXGroup;
 			children = (
-				9B32DDA62D260F5A006A7918 /* New Group */,
+				9B32DDDE2D261073006A7918 /* TrackApplication */,
 				9B0517242D18F03300ECCA06 /* TrackApplicationTests */,
 				9B05172E2D18F03300ECCA06 /* TrackApplicationUITests */,
 				9B0517122D18F03200ECCA06 /* Products */,
@@ -168,6 +188,60 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9B32DDC42D261073006A7918 /* CoachView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CoachView;
+			sourceTree = "<group>";
+		};
+		9B32DDC62D261073006A7918 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				9B32DDC52D261073006A7918 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		9B32DDC72D261073006A7918 /* StudentView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = StudentView;
+			sourceTree = "<group>";
+		};
+		9B32DDDE2D261073006A7918 /* TrackApplication */ = {
+			isa = PBXGroup;
+			children = (
+				9B32DDC42D261073006A7918 /* CoachView */,
+				9B32DDC62D261073006A7918 /* Preview Content */,
+				9B32DDC72D261073006A7918 /* StudentView */,
+				9B32DDC82D261073006A7918 /* Assets.xcassets */,
+				9B32DDC92D261073006A7918 /* AssignmentCreationView.swift */,
+				9B32DDCA2D261073006A7918 /* AssignmentDetailView.swift */,
+				9B32DDCB2D261073006A7918 /* CoachLogin.swift */,
+				9B32DDCC2D261073006A7918 /* ContentView.swift */,
+				9B32DDCD2D261073006A7918 /* CreateAccountView.swift */,
+				9B32DDCE2D261073006A7918 /* DashboardView.swift */,
+				9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */,
+				9B32DDD02D261073006A7918 /* GoogleService-Info.plist */,
+				9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */,
+				9B32DDD22D261073006A7918 /* GraphView.swift */,
+				9B32DDD32D261073006A7918 /* GraphViewController.swift */,
+				9B32DDD42D261073006A7918 /* GroupDetailView.swift */,
+				9B32DDD52D261073006A7918 /* HomeView.swift */,
+				9B32DDD62D261073006A7918 /* LogDataModel.swift */,
+				9B32DDD72D261073006A7918 /* LogView.swift */,
+				9B32DDD82D261073006A7918 /* LogViewController.swift */,
+				9B32DDD92D261073006A7918 /* PriorAssignmentsView.swift */,
+				9B32DDDA2D261073006A7918 /* RoleSelectionView.swift */,
+				9B32DDDB2D261073006A7918 /* StudentCatalogView.swift */,
+				9B32DDDC2D261073006A7918 /* TrackApplicationApp.swift */,
+				9B32DDDD2D261073006A7918 /* WorkoutDataManager.swift */,
+			);
+			path = TrackApplication;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -182,9 +256,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				9B32DDA62D260F5A006A7918 /* New Group */,
 			);
 			name = TrackApplication;
 			packageProductDependencies = (
@@ -318,6 +389,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B32DDDF2D261073006A7918 /* Preview Assets.xcassets in Resources */,
+				9B32DDE02D261073006A7918 /* GoogleService-Info.plist in Resources */,
+				9B32DDE12D261073006A7918 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,6 +416,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B32DDE22D261073006A7918 /* GroupDetailView.swift in Sources */,
+				9B32DDE32D261073006A7918 /* StudentCatalogView.swift in Sources */,
+				9B32DDE42D261073006A7918 /* ContentView.swift in Sources */,
+				9B32DDE52D261073006A7918 /* DashboardView.swift in Sources */,
+				9B32DDE62D261073006A7918 /* HomeView.swift in Sources */,
+				9B32DDE72D261073006A7918 /* CreateAccountView.swift in Sources */,
+				9B32DDE82D261073006A7918 /* RoleSelectionView.swift in Sources */,
+				9B32DDE92D261073006A7918 /* AssignmentDetailView.swift in Sources */,
+				9B32DDEA2D261073006A7918 /* GraphViewController.swift in Sources */,
+				9B32DDEB2D261073006A7918 /* LogView.swift in Sources */,
+				9B32DDEC2D261073006A7918 /* CoachLogin.swift in Sources */,
+				9B32DDED2D261073006A7918 /* AssignmentCreationView.swift in Sources */,
+				9B32DDEE2D261073006A7918 /* PriorAssignmentsView.swift in Sources */,
+				9B32DDEF2D261073006A7918 /* WorkoutDataManager.swift in Sources */,
+				9B32DDF02D261073006A7918 /* FirebaseAuthManager.swift in Sources */,
+				9B32DDF12D261073006A7918 /* LogDataModel.swift in Sources */,
+				9B32DDF22D261073006A7918 /* GraphView.swift in Sources */,
+				9B32DDF32D261073006A7918 /* TrackApplicationApp.swift in Sources */,
+				9B32DDF42D261073006A7918 /* LogViewController.swift in Sources */,
+				9B32DDF52D261073006A7918 /* GoogleSignInButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
