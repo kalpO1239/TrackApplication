@@ -5,8 +5,8 @@ struct LogView: View {
     @State private var miles: String = ""
     @State private var hours: String = ""
     @State private var minutes: String = ""
-    @State private var date: Date = Date() // Add state for the date
-    @State private var isCalendarVisible: Bool = false // Track calendar visibility
+    @State private var date: Date = Date() // State for the date
+    @State private var isDatePickerVisible: Bool = false // Track if the date picker modal is visible
     
     @EnvironmentObject var logDataModel: LogDataModel // Use @EnvironmentObject
     
@@ -27,7 +27,7 @@ struct LogView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
             
-            // Hours input
+            // Hours and Minutes input
             HStack {
                 TextField("Hours", text: $hours)
                     .keyboardType(.numberPad)
@@ -39,21 +39,18 @@ struct LogView: View {
             }
             .padding()
             
-            // Toggle Calendar Button
+            // Date Picker Button
             Button(action: {
-                isCalendarVisible.toggle() // Toggle the calendar visibility
+                isDatePickerVisible.toggle() // Show the date picker modal
             }) {
-                Text(isCalendarVisible ? "Hide Calendar" : "Show Calendar")
-                    .foregroundColor(.blue)
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundColor(.blue)
+                    Text("Select Date: \(formattedDate(date))")
+                        .foregroundColor(.blue)
+                }
             }
             .padding()
-            
-            // Conditionally show the DatePicker based on isCalendarVisible state
-            if isCalendarVisible {
-                DatePicker("Select Date", selection: $date, displayedComponents: [.date])
-                    .datePickerStyle(.graphical)
-                    .padding()
-            }
             
             // Submit button
             Button(action: handleSubmit) {
@@ -65,6 +62,27 @@ struct LogView: View {
                     .cornerRadius(10)
             }
             .padding(.horizontal)
+        }
+        .sheet(isPresented: $isDatePickerVisible) {
+            VStack {
+                DatePicker(
+                    "Select Workout Date",
+                    selection: $date,
+                    displayedComponents: [.date]
+                )
+                .datePickerStyle(.graphical)
+                .padding()
+                
+                Button("Done") {
+                    isDatePickerVisible = false // Dismiss the modal
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                .padding()
+            }
         }
         .padding()
     }
@@ -78,7 +96,15 @@ struct LogView: View {
         // Add the new log data to the shared model
         logDataModel.addLog(date: date, miles: miles, title: title, timeInMinutes: totalTime)
     }
+    
+    // Helper to format date
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
+    }
 }
+
 
 struct TabbedView: View {
     // Create an instance of LogDataModel
@@ -108,4 +134,8 @@ struct TabbedView: View {
                 .environmentObject(logDataModel) // Inject the instance of LogDataModel into the environment
         }
     }
+}
+
+#Preview{
+    TabbedView()
 }

@@ -59,32 +59,23 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		9B0517442D18F0EB00ECCA06 /* Exceptions for "TrackApplication" folder in "TrackApplicationTests" target */ = {
+		9B32DDC02D260F5A006A7918 /* Exceptions for "New Group" folder in "TrackApplicationTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"GoogleService-Info.plist",
+				"TrackApplication/GoogleService-Info.plist",
 			);
 			target = 9B0517202D18F03300ECCA06 /* TrackApplicationTests */;
 		};
-		9B0517452D18F0EB00ECCA06 /* Exceptions for "TrackApplication" folder in "TrackApplicationUITests" target */ = {
+		9B32DDC12D260F5A006A7918 /* Exceptions for "New Group" folder in "TrackApplicationUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"GoogleService-Info.plist",
+				"TrackApplication/GoogleService-Info.plist",
 			);
 			target = 9B05172A2D18F03300ECCA06 /* TrackApplicationUITests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		9B0517132D18F03200ECCA06 /* TrackApplication */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				9B0517442D18F0EB00ECCA06 /* Exceptions for "TrackApplication" folder in "TrackApplicationTests" target */,
-				9B0517452D18F0EB00ECCA06 /* Exceptions for "TrackApplication" folder in "TrackApplicationUITests" target */,
-			);
-			path = TrackApplication;
-			sourceTree = "<group>";
-		};
 		9B0517242D18F03300ECCA06 /* TrackApplicationTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackApplicationTests;
@@ -93,6 +84,15 @@
 		9B05172E2D18F03300ECCA06 /* TrackApplicationUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackApplicationUITests;
+			sourceTree = "<group>";
+		};
+		9B32DDA62D260F5A006A7918 /* New Group */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9B32DDC02D260F5A006A7918 /* Exceptions for "New Group" folder in "TrackApplicationTests" target */,
+				9B32DDC12D260F5A006A7918 /* Exceptions for "New Group" folder in "TrackApplicationUITests" target */,
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -151,7 +151,7 @@
 		9B0517082D18F03200ECCA06 = {
 			isa = PBXGroup;
 			children = (
-				9B0517132D18F03200ECCA06 /* TrackApplication */,
+				9B32DDA62D260F5A006A7918 /* New Group */,
 				9B0517242D18F03300ECCA06 /* TrackApplicationTests */,
 				9B05172E2D18F03300ECCA06 /* TrackApplicationUITests */,
 				9B0517122D18F03200ECCA06 /* Products */,
@@ -184,7 +184,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				9B0517132D18F03200ECCA06 /* TrackApplication */,
+				9B32DDA62D260F5A006A7918 /* New Group */,
 			);
 			name = TrackApplication;
 			packageProductDependencies = (

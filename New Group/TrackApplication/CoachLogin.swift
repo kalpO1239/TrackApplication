@@ -73,7 +73,7 @@ struct CoachLogin: View {
                 }
                 .padding(.bottom, 20)
 
-                NavigationLink(destination: TabbedView(), isActive: $isUserLoggedIn) {
+                NavigationLink(destination: GroupDetailView(groupName: "base" ), isActive: $isUserLoggedIn) {
                     EmptyView()
                 }
             }
