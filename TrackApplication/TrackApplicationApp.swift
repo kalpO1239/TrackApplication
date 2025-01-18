@@ -1,48 +1,37 @@
-//
-//  TrackApplicationApp.swift
-//  TrackApplication
-//
-//  Created by Kalp Ostawal on 12/22/24.
-//
-
 import SwiftUI
+import Firebase
 import FirebaseCore
 import GoogleSignIn
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,open url: URL,
+  
+  func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-      var handled: Bool
-
-        handled = GIDSignIn.sharedInstance.handle(url)
-        if handled {
-          return true
-        }
-
-        // Handle other custom URL types.
-
-        // If not handled by this app, return false.
-        
+    // Configure Firebase before anything else
     FirebaseApp.configure()
     return true
   }
-    
-}
 
+  func application(_ application: UIApplication, open url: URL,
+                   options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    // Handle Google Sign-In URL
+    return GIDSignIn.sharedInstance.handle(url)
+  }
+}
 
 @main
 struct TrackApplicationApp: App {
-  // register app delegate for Firebase setup
+  // Register app delegate for Firebase setup
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        ContentView()
-              .onOpenURL { url in
-                                  // Handle the URL to complete the sign-in process
-                                  GIDSignIn.sharedInstance.handle(url)
-                              }
+        RoleSelectionView()
+          .onOpenURL { url in
+            // Handle the URL to complete the sign-in process
+            GIDSignIn.sharedInstance.handle(url)
+          }
       }
     }
   }

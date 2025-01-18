@@ -1,17 +1,3 @@
-//
-//  LogViewController.swift
-//  TrackApplication
-//
-//  Created by Kalp Ostawal on 12/28/24.
-//
-//
-//  LogViewController 2.swift
-//  TrackApplication
-//
-//  Created by Kalp Ostawal on 12/29/24.
-//
-
-
 import UIKit
 
 class LogViewController: UIViewController {
@@ -45,9 +31,8 @@ class LogViewController: UIViewController {
             title: title,
             timeInMinutes: totalMinutes
         )
-
         
-        // Navigate to GraphViewController
-        performSegue(withIdentifier: "showGraph", sender: nil)
+        // Navigate to the next screen after saving the workout
+        self.performSegue(withIdentifier: "showGraph", sender: nil)
     }
 }

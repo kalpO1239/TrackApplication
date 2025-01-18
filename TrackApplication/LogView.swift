@@ -1,33 +1,28 @@
 import SwiftUI
 
 struct LogView: View {
+    @EnvironmentObject var workoutDataManager: WorkoutDataManager
     @State private var title: String = ""
     @State private var miles: String = ""
     @State private var hours: String = ""
     @State private var minutes: String = ""
-    @State private var date: Date = Date() // State for the date
-    @State private var isDatePickerVisible: Bool = false // Track if the date picker modal is visible
-    
-    @EnvironmentObject var logDataModel: LogDataModel // Use @EnvironmentObject
-    
+    @State private var date: Date = Date()
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Log Your Workout")
                 .font(.title)
                 .bold()
-            
-            // Title input
+
             TextField("Enter Title", text: $title)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-            
-            // Miles input
+
             TextField("Enter Miles", text: $miles)
                 .keyboardType(.decimalPad)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-            
-            // Hours and Minutes input
+
             HStack {
                 TextField("Hours", text: $hours)
                     .keyboardType(.numberPad)
@@ -38,21 +33,7 @@ struct LogView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
             .padding()
-            
-            // Date Picker Button
-            Button(action: {
-                isDatePickerVisible.toggle() // Show the date picker modal
-            }) {
-                HStack {
-                    Image(systemName: "calendar")
-                        .foregroundColor(.blue)
-                    Text("Select Date: \(formattedDate(date))")
-                        .foregroundColor(.blue)
-                }
-            }
-            .padding()
-            
-            // Submit button
+
             Button(action: handleSubmit) {
                 Text("Submit Log")
                     .frame(maxWidth: .infinity)
@@ -63,52 +44,22 @@ struct LogView: View {
             }
             .padding(.horizontal)
         }
-        .sheet(isPresented: $isDatePickerVisible) {
-            VStack {
-                DatePicker(
-                    "Select Workout Date",
-                    selection: $date,
-                    displayedComponents: [.date]
-                )
-                .datePickerStyle(.graphical)
-                .padding()
-                
-                Button("Done") {
-                    isDatePickerVisible = false // Dismiss the modal
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-                .padding()
-            }
-        }
         .padding()
     }
-    
-    func handleSubmit() {
-        guard let miles = Double(miles) else { return }
-        guard let minutes = Int(minutes), let hours = Int(hours) else { return }
-        
+
+    private func handleSubmit() {
+        guard let miles = Double(miles), let minutes = Int(minutes), let hours = Int(hours) else { return }
+
         let totalTime = hours * 60 + minutes // Calculate total minutes
-        
-        // Add the new log data to the shared model
-        logDataModel.addLog(date: date, miles: miles, title: title, timeInMinutes: totalTime)
-    }
-    
-    // Helper to format date
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
+
+        // Save workout data to WorkoutDataManager
+        workoutDataManager.addWorkout(date: date, miles: miles, title: title, timeInMinutes: totalTime)
     }
 }
 
-
 struct TabbedView: View {
-    // Create an instance of LogDataModel
-    @StateObject private var logDataModel = LogDataModel()
+    // Create an instance of WorkoutDataManager
+    @StateObject private var workoutDataManager = WorkoutDataManager.shared
     
     var body: some View {
         TabView {
@@ -117,25 +68,28 @@ struct TabbedView: View {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
-                .environmentObject(logDataModel)
+                .environmentObject(workoutDataManager)  // Inject the WorkoutDataManager into the environment
             
-            LogView()
+            LogView()  // Assuming this is now a SwiftUI view
                 .tabItem {
                     Image(systemName: "pencil.circle.fill")
                     Text("Log Run")
                 }
-                .environmentObject(logDataModel) // Inject the instance of LogDataModel into the environment
+                .environmentObject(workoutDataManager)  // Inject the WorkoutDataManager into the environment
             
-            GraphView()
+            GraphView()  // Assuming this view displays the data graph
                 .tabItem {
                     Image(systemName: "chart.bar.fill")
                     Text("Progress")
                 }
-                .environmentObject(logDataModel) // Inject the instance of LogDataModel into the environment
+                .environmentObject(workoutDataManager)  // Inject the WorkoutDataManager into the environment
         }
     }
 }
 
-#Preview{
-    TabbedView()
+struct TabbedView_Previews: PreviewProvider {
+    static var previews: some View {
+        TabbedView()
+            .environmentObject(WorkoutDataManager.shared) // Ensure that the shared WorkoutDataManager is passed in previews
+    }
 }

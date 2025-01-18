@@ -1,11 +1,3 @@
-//
-//  RoleSelectionView.swift
-//  TrackApplication
-//
-//  Created by Kalp Ostawal on 12/31/24.
-//
-
-
 import SwiftUI
 
 struct RoleSelectionView: View {
@@ -63,7 +55,7 @@ struct RoleSelectionView: View {
     // Navigation to ContentView
     func navigateToStudentView() {
         if let window = UIApplication.shared.windows.first {
-            window.rootViewController = UIHostingController(rootView: ContentView())
+            window.rootViewController = UIHostingController(rootView: ContentView()) // Update for Student's main view
             window.makeKeyAndVisible()
         }
     }

@@ -1,83 +1,69 @@
 import SwiftUI
-import FirebaseAuth
 
 struct HomeView: View {
-    @EnvironmentObject var logDataModel: LogDataModel // Access shared log data
-    @State private var assignments: [String] = ["Assignment 1", "Assignment 2", "Assignment 3"] // Placeholder for assignments
+    @EnvironmentObject var workoutDataManager: WorkoutDataManager // Access the WorkoutDataManager instead
     
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
+
     var body: some View {
         NavigationView {
-            HStack(spacing: 20) {
-                // Assignments Section
-                VStack(alignment: .leading) {
-                    Text("Assignments")
-                        .font(.headline)
-                        .padding(.bottom, 10)
-                    
-                    List(assignments, id: \.self) { assignment in
-                        Text(assignment)
-                    }
-                    .listStyle(PlainListStyle())
+            VStack {
+                // Example button for logging workout
+                Button(action: {
+                    logWorkout()
+                }) {
+                    Text("Log Workout")
+                        .font(.title)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .shadow(radius: 3)
-                
-                // Stats Section
-                VStack {
-                    Text("Weekly Stats")
-                        .font(.headline)
-                        .padding(.bottom, 10)
-                    
-                    Text("Total Weekly Mileage")
-                        .font(.subheadline)
-                    Text("\(calculateWeeklyMileage(), specifier: "%.2f") miles")
-                        .font(.largeTitle)
-                        .bold()
-                        .foregroundColor(.blue)
-                        .padding(.bottom, 20)
-                    
-                    Button(action: logOut) {
-                        Text("Log Out")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                            .shadow(radius: 3)
-                    }
+
+                // Example button for viewing progress
+                Button(action: {
+                    showProgress()
+                }) {
+                    Text("View Progress")
+                        .font(.title)
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .shadow(radius: 3)
+
+                Spacer()
             }
-            .padding()
-            .navigationTitle("Dashboard")
+            .navigationTitle("Home")
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text("Notification"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+            }
         }
     }
-    
-    func calculateWeeklyMileage() -> Double {
-        let calendar = Calendar.current
-        let now = Date()
-        let startOfWeek = calendar.dateInterval(of: .weekOfYear, for: now)?.start ?? now
-        
-        return logDataModel.logs
-            .filter { $0.date >= startOfWeek }
-            .reduce(0) { $0 + $1.miles }
+
+    func logWorkout() {
+        // You would call the relevant method from WorkoutDataManager to log a workout
+        if let workout = workoutDataManager.getWorkoutData().first {
+            workoutDataManager.addWorkout(date: workout.date, miles: workout.miles, title: workout.title, timeInMinutes: workout.timeInMinutes)
+            alertMessage = "Workout logged!"
+            showingAlert = true
+        } else {
+            alertMessage = "No workout to log."
+            showingAlert = true
+        }
     }
-    
-    func logOut() {
-        FirebaseAuthManager.shared.logOut()
+
+    func showProgress() {
+        // Navigate to the GraphView or show the progress data
+        alertMessage = "Showing progress..."
+        showingAlert = true
     }
 }
 
-
-
-
-#Preview {
-   TabbedView()
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+            .environmentObject(WorkoutDataManager.shared)  // Use WorkoutDataManager here for the preview
+    }
 }

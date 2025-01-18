@@ -1,49 +1,43 @@
 import SwiftUI
-import Charts
+import Firebase
 
 struct GraphView: View {
-    @EnvironmentObject var logDataModel: LogDataModel
+    // Use the shared WorkoutDataManager to get the workout logs
+    @EnvironmentObject var workoutDataManager: WorkoutDataManager
+    @State private var workoutLogs: [Workout] = []
+    
+    // Optionally, you can add loading state here for Firebase fetch
+    @State private var isLoading: Bool = true
     
     var body: some View {
         VStack {
-            if !logDataModel.logs.isEmpty {
-                let weeklyLogs = aggregateLogsByWeek(logs: logDataModel.logs)
-                
-                Chart {
-                    ForEach(weeklyLogs, id: \.weekStart) { weekLog in
-                        LineMark(
-                            x: .value("Week Starting", weekLog.weekStart),
-                            y: .value("Total Miles", weekLog.totalMiles)
-                        )
-                        .symbol(Circle())
-                        .foregroundStyle(.blue)
+            if isLoading {
+                Text("Loading...")
+                    .padding()
+            } else {
+                List(workoutLogs, id: \.date) { workout in
+                    HStack {
+                        Text(workout.title)
+                        Spacer()
+                        Text("\(workout.miles, specifier: "%.2f") miles")
+                        Spacer()
+                        Text("\(workout.timeInMinutes) min")
                     }
                 }
-                .frame(height: 300)
-                .padding()
-            } else {
-                Text("No logs available")
-                    .font(.headline)
-                    .foregroundColor(.gray)
+                .navigationTitle("Workout Logs")
             }
         }
-        .padding()
+        .onAppear {
+            // Fetch workout data from Firebase when the view appears
+            loadWorkoutLogs()
+        }
     }
     
-    func aggregateLogsByWeek(logs: [Log]) -> [WeeklyLog] {
-        var weeklyData: [Date: Double] = [:]
-        
-        let calendar = Calendar.current
-        for log in logs {
-            let weekStart = calendar.dateInterval(of: .weekOfYear, for: log.date)?.start ?? log.date
-            weeklyData[weekStart, default: 0] += log.miles
+    private func loadWorkoutLogs() {
+        // Fetch the workout data from the WorkoutDataManager or directly from Firebase
+        workoutDataManager.fetchWorkoutDataFromFirebase { fetchedLogs in
+            self.workoutLogs = fetchedLogs
+            self.isLoading = false
         }
-        
-        return weeklyData.map { WeeklyLog(weekStart: $0.key, totalMiles: $0.value) }
     }
-}
-
-struct WeeklyLog {
-    let weekStart: Date
-    let totalMiles: Double
 }
