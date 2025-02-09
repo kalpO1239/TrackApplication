@@ -7,7 +7,7 @@ struct GraphView: View {
     @State private var workoutLogs: [Workout] = []
     
     // Optionally, you can add loading state here for Firebase fetch
-    @State private var isLoading: Bool = true
+    @State private var isLoading: Bool = false
     
     var body: some View {
         VStack {

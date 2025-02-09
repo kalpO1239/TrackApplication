@@ -73,7 +73,7 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 20)
 
-                NavigationLink(destination: TabbedView(), isActive: $isUserLoggedIn) {
+                NavigationLink(destination: HomeView(), isActive: $isUserLoggedIn) {
                     EmptyView()
                 }
             }
