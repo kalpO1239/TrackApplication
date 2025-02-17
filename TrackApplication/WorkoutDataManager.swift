@@ -1,66 +1,64 @@
 import Firebase
 import FirebaseFirestore
 
-class WorkoutDataManager: ObservableObject { // Conform to ObservableObject
+class WorkoutDataManager: ObservableObject {
     static let shared = WorkoutDataManager()
     private init() {}
-    
-    @Published var workoutData: [Workout] = [] // Use @Published to automatically update views
-    
+
+    @Published var workoutData: [WorkoutEntry] = [] // ✅ Ensures SwiftUI updates when changed
+
     func addWorkout(date: Date, miles: Double, title: String, timeInMinutes: Int) {
-        let newWorkout = Workout(date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
-        workoutData.append(newWorkout)
-        // Add to Firebase here
-        addWorkoutToFirebase(workout: newWorkout)
+        let newWorkout = WorkoutEntry(date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
+        
+        DispatchQueue.main.async {
+            self.workoutData.append(newWorkout) // ✅ Ensures UI updates immediately
+        }
+        
+        //addWorkoutToFirebase(workout: newWorkout)
     }
-    
-    func getWorkoutData() -> [Workout] {
-        return workoutData
-    }
-    
-    func fetchWorkoutDataFromFirebase(completion: @escaping ([Workout]) -> Void) {
+
+    func fetchWorkoutDataFromFirebase() {
         let db = Firestore.firestore()
         db.collection("workouts").getDocuments { snapshot, error in
             if let error = error {
                 print("Error getting documents: \(error)")
-                completion([])
                 return
             }
-            
-            var fetchedWorkouts: [Workout] = []
+
+            var fetchedWorkouts: [WorkoutEntry] = []
             for document in snapshot!.documents {
                 let data = document.data()
                 if let title = data["title"] as? String,
                    let miles = data["miles"] as? Double,
                    let timeInMinutes = data["timeInMinutes"] as? Int,
                    let timestamp = data["date"] as? Timestamp {
-                    let workout = Workout(date: timestamp.dateValue(), miles: miles, title: title, timeInMinutes: timeInMinutes)
+                    let workout = WorkoutEntry(date: timestamp.dateValue(), miles: miles, title: title, timeInMinutes: timeInMinutes)
                     fetchedWorkouts.append(workout)
                 }
             }
-            completion(fetchedWorkouts)
-        }
-    }
-    
-    private func addWorkoutToFirebase(workout: Workout) {
-        let db = Firestore.firestore()
-        db.collection("workouts").addDocument(data: [
-            "title": workout.title,
-            "miles": workout.miles,
-            "timeInMinutes": workout.timeInMinutes,
-            "date": Timestamp(date: workout.date)
-        ]) { error in
-            if let error = error {
-                print("Error adding document: \(error)")
+
+            DispatchQueue.main.async {
+                self.workoutData = fetchedWorkouts // ✅ Updates UI when data is fetched
             }
         }
     }
 }
 
-// Workout data structure
-struct Workout {
+
+// ✅ FIX: Renamed 'Workout' to 'WorkoutEntry' to ensure consistency with LogView.swift
+struct WorkoutEntry: Identifiable, Equatable { // ✅ Added Equatable
+    let id = UUID()
     let date: Date
     let miles: Double
     let title: String
     let timeInMinutes: Int
+
+    // ✅ Implement Equatable conformance
+    static func == (lhs: WorkoutEntry, rhs: WorkoutEntry) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.date == rhs.date &&
+               lhs.miles == rhs.miles &&
+               lhs.title == rhs.title &&
+               lhs.timeInMinutes == rhs.timeInMinutes
+    }
 }

@@ -19,7 +19,7 @@ struct LogView: View {
     var body: some View {
         VStack(spacing: 15) {
             Picker("Select Workout Type", selection: $selectedWorkoutType) {
-                ForEach(workoutTypes, id: \..self) { type in
+                ForEach(workoutTypes, id: \.self) { type in
                     Text(type).tag(type)
                 }
             }
@@ -37,7 +37,7 @@ struct LogView: View {
             
             HStack {
                 Picker("", selection: $leftMiles) {
-                    ForEach(0..<31, id: \..self) { Text("\($0)") }
+                    ForEach(0..<31, id: \.self) { Text("\($0)") }
                 }
                 .pickerStyle(WheelPickerStyle())
                 .frame(height: 80)
@@ -45,7 +45,7 @@ struct LogView: View {
                 Text(".")
                 
                 Picker("", selection: $rightMiles) {
-                    ForEach(0..<100, id: \..self) { Text(String(format: "%02d", $0)) }
+                    ForEach(0..<100, id: \.self) { Text(String(format: "%02d", $0)) }
                 }
                 .pickerStyle(WheelPickerStyle())
                 .frame(height: 80)
@@ -53,7 +53,7 @@ struct LogView: View {
             
             HStack {
                 Picker("", selection: $selectedHours) {
-                    ForEach(0..<25, id: \..self) { Text("\($0)") }
+                    ForEach(0..<25, id: \.self) { Text("\($0)") }
                 }
                 .pickerStyle(WheelPickerStyle())
                 .frame(height: 80)
@@ -61,7 +61,7 @@ struct LogView: View {
                 Text(":")
                 
                 Picker("", selection: $selectedMinutes) {
-                    ForEach(0..<60, id: \..self) { Text("\($0)") }
+                    ForEach(0..<60, id: \.self) { Text("\($0)") }
                 }
                 .pickerStyle(WheelPickerStyle())
                 .frame(height: 80)
@@ -69,7 +69,7 @@ struct LogView: View {
                 Text(":")
                 
                 Picker("", selection: $selectedSeconds) {
-                    ForEach(0..<60, id: \..self) { Text("\($0)") }
+                    ForEach(0..<60, id: \.self) { Text("\($0)") }
                 }
                 .pickerStyle(WheelPickerStyle())
                 .frame(height: 80)
@@ -77,7 +77,7 @@ struct LogView: View {
                 Text(".")
                 
                 Picker("", selection: $selectedHundredths) {
-                    ForEach(0..<100, id: \..self) { Text("\($0)") }
+                    ForEach(0..<100, id: \.self) { Text("\($0)") }
                 }
                 .pickerStyle(WheelPickerStyle())
                 .frame(height: 80)
@@ -108,48 +108,14 @@ struct LogView: View {
     private func handleSubmit() {
         let miles = Double(leftMiles) + Double(rightMiles) / 100.0
         let totalTime = (selectedHours * 3600) + (selectedMinutes * 60) + selectedSeconds + (selectedHundredths / 100)
-        
+
+        // ✅ Ensure the function call includes all correct parameters
         workoutDataManager.addWorkout(date: date, miles: miles, title: title, timeInMinutes: totalTime)
     }
+
+
 }
 
 
 
 
-
-struct TabbedView: View {
-    // Create an instance of WorkoutDataManager
-    @StateObject private var workoutDataManager = WorkoutDataManager.shared
-    
-    var body: some View {
-        TabView {
-            HomeView()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
-                }
-                .environmentObject(workoutDataManager)  // Inject the WorkoutDataManager into the environment
-            
-            LogView()  // Assuming this is now a SwiftUI view
-                .tabItem {
-                    Image(systemName: "pencil.circle.fill")
-                    Text("Log Run")
-                }
-                .environmentObject(workoutDataManager)  // Inject the WorkoutDataManager into the environment
-            
-            GraphView()  // Assuming this view displays the data graph
-                .tabItem {
-                    Image(systemName: "chart.bar.fill")
-                    Text("Progress")
-                }
-                .environmentObject(workoutDataManager)  // Inject the WorkoutDataManager into the environment
-        }
-    }
-}
-
-struct TabbedView_Previews: PreviewProvider {
-    static var previews: some View {
-        TabbedView()
-            .environmentObject(WorkoutDataManager.shared) // Ensure that the shared WorkoutDataManager is passed in previews
-    }
-}

@@ -3,6 +3,7 @@ import FirebaseAuth
 import GoogleSignIn
 
 struct ContentView: View {
+    @StateObject var workoutDataManager = WorkoutDataManager.shared 
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var errorMessage: String?
@@ -73,7 +74,7 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 20)
 
-                NavigationLink(destination: HomeView(), isActive: $isUserLoggedIn) {
+                NavigationLink(destination: HomeView().environmentObject(workoutDataManager), isActive: $isUserLoggedIn) {
                     EmptyView()
                 }
             }

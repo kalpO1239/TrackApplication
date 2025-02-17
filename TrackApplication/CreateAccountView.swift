@@ -68,7 +68,7 @@ struct CreateAccountView: View {
             }
             .padding(.top, 20)
 
-            NavigationLink(destination: TabbedView(), isActive: $isUserLoggedIn) {
+            NavigationLink(destination: HomeView(), isActive: $isUserLoggedIn) {
                 EmptyView()
             }
         }
