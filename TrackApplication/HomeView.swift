@@ -1,5 +1,4 @@
 import SwiftUI
-import Charts
 
 struct HomeView: View {
     @EnvironmentObject var workoutDataManager: WorkoutDataManager
@@ -22,16 +21,14 @@ struct HomeView: View {
             .navigationTitle("Home")
             .onAppear {
                 initializeWeeks()
-                workoutDataManager.fetchWorkoutDataFromFirebase()
-                updateWeekMileage()
+                updateWeekMileage() // Update the mileage when the view appears
             }
             .onChange(of: workoutDataManager.workoutData) { _ in
-                updateWeekMileage()
+                updateWeekMileage() // Update when the workout data changes
             }
         }
     }
     
-    // ✅ Function to initialize weekly data
     func getMondayOfWeek(offset: Int) -> Date {
         let calendar = Calendar.current
         let today = Date()
@@ -43,7 +40,7 @@ struct HomeView: View {
     func initializeWeeks() {
         var dates: [Date] = []
         for i in 0..<10 {
-            let weekStart = getMondayOfWeek(offset: -i)
+            let weekStart = getMondayOfWeek(offset: -i) // Initialize weeks from oldest to latest
             dates.append(weekStart)
         }
         self.weeks = dates
@@ -55,22 +52,22 @@ struct HomeView: View {
         return formatter.string(from: date)
     }
 
-    // ✅ Updates the weekly mileage based on logged workouts
     func updateWeekMileage() {
         var mileageDict: [Date: Double] = [:]
 
+        // Aggregate miles per week based on the workoutData
         for workout in workoutDataManager.workoutData {
             let workoutWeek = getMondayOfWeek(offset: Calendar.current.component(.weekOfYear, from: workout.date) - Calendar.current.component(.weekOfYear, from: Date()))
             mileageDict[workoutWeek, default: 0] += workout.miles
         }
 
+        // Update the weekMileage array to reflect the total miles per week
         for (i, week) in weeks.enumerated() {
-            weekMileage[i] = Int(mileageDict[week] ?? 0)
+            weekMileage[i] = Int(mileageDict[week] ?? 0) // Set to 0 if no data for the week
         }
     }
 }
 
-// ✅ Weekly Progress Graph View (Embedded in HomeView.swift)
 struct WeeklyProgressView: View {
     let weeks: [Date]
     let weekMileage: [Int]
@@ -80,8 +77,9 @@ struct WeeklyProgressView: View {
     var body: some View {
         VStack {
             Text("Weekly Progress")
-                .font(.headline)
-            Spacer()
+                .font(.title)
+                .foregroundColor(.white)
+                .padding(.bottom, 10)
 
             ZStack {
                 GeometryReader { geometry in
@@ -89,27 +87,30 @@ struct WeeklyProgressView: View {
                         let graphWidth = geometry.size.width
                         let graphHeight = geometry.size.height
                         let pointSpacing = graphWidth / CGFloat(weeks.count - 1)
-                        
+
                         if weeks.isEmpty { return }
-                        
-                        let startX = pointSpacing * 0
-                        let startY = graphHeight - CGFloat(weekMileage[0])
+
+                        let maxMileage = weekMileage.max() ?? 1
+                        let scaleFactor = graphHeight / CGFloat(maxMileage)
+
+                        let startX = pointSpacing * CGFloat(weeks.count - 1)  // Start at the farthest right
+                        let startY = graphHeight - CGFloat(weekMileage[0]) * scaleFactor
                         path.move(to: CGPoint(x: startX, y: startY))
-                        
+
                         for i in 1..<weeks.count {
-                            let x = pointSpacing * CGFloat(i)
-                            let y = graphHeight - CGFloat(weekMileage[i])
+                            let x = pointSpacing * CGFloat(weeks.count - 1 - i) // Reverse the x-axis order
+                            let y = graphHeight - CGFloat(weekMileage[i]) * scaleFactor
                             path.addLine(to: CGPoint(x: x, y: y))
                         }
                     }
                     .stroke(Color.blue, lineWidth: 2)
 
                     ForEach(0..<weeks.count, id: \.self) { i in
-                        let x = (geometry.size.width / CGFloat(weeks.count - 1)) * CGFloat(i)
-                        let y = geometry.size.height - CGFloat(weekMileage[i])
+                        let x = (geometry.size.width / CGFloat(weeks.count - 1)) * CGFloat(weeks.count - 1 - i)  // Reverse the x-axis order
+                        let y = geometry.size.height - CGFloat(weekMileage[i]) * (geometry.size.height / CGFloat(weekMileage.max() ?? 0))
 
                         Circle()
-                            .frame(width: 10, height: 10)
+                            .frame(width: 12, height: 12)
                             .position(x: x, y: y)
                             .foregroundColor(selectedWeek == i ? .blue : .blue.opacity(0.7))
                             .onTapGesture {
@@ -119,39 +120,40 @@ struct WeeklyProgressView: View {
                     }
                 }
             }
-            .frame(height: 200)
-            .border(Color.gray, width: 1)
-            .padding(.horizontal)
-            
-            if selectedWeek != nil {
-                Text("Mileage: \(selectedMileage) mi")
+            .frame(height: 250)
+            .border(Color.gray.opacity(0.3), width: 1)
+            .padding(.horizontal, 15)
+
+            if let selectedWeek = selectedWeek {
+                Text("Mileage: \(weekMileage[selectedWeek]) mi")
                     .font(.title2)
-                    .padding()
+                    .foregroundColor(.black)
+                    .padding(.top, 10)
             }
         }
     }
 }
 
-// ✅ Activity Log Button (Embedded in HomeView.swift)
+
 struct ActivityLogButton: View {
     var body: some View {
         Button(action: {}) {
             HStack {
                 Image(systemName: "list.bullet")
                 Text("Activity Log")
+                    .font(.title2)
             }
-            .font(.title2)
             .frame(maxWidth: .infinity)
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
-            .cornerRadius(10)
+            .cornerRadius(12)
+            .shadow(radius: 5)
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 20)
     }
 }
 
-// ✅ Log Workout Button (Embedded in HomeView.swift)
 struct LogWorkoutButton: View {
     var body: some View {
         NavigationLink(destination: LogView()) {
@@ -161,9 +163,10 @@ struct LogWorkoutButton: View {
                 .padding()
                 .background(Color.green)
                 .foregroundColor(.white)
-                .cornerRadius(10)
+                .cornerRadius(12)
+                .shadow(radius: 5)
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 20)
     }
 }
 

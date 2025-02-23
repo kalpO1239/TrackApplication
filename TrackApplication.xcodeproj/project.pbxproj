@@ -33,6 +33,7 @@
 		9B0517762D18F28F00ECCA06 /* FirebaseVertexAI in Frameworks */ = {isa = PBXBuildFile; productRef = 9B0517752D18F28F00ECCA06 /* FirebaseVertexAI */; };
 		9B0517792D18F35900ECCA06 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 9B0517782D18F35900ECCA06 /* GoogleSignIn */; };
 		9B05177B2D18F35900ECCA06 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9B05177A2D18F35900ECCA06 /* GoogleSignInSwift */; };
+		9B30AB222D6ABFC20018D219 /* SplitRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B30AB212D6ABFC20018D219 /* SplitRecorder.swift */; };
 		9B32DDDF2D261073006A7918 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B32DDC52D261073006A7918 /* Preview Assets.xcassets */; };
 		9B32DDE02D261073006A7918 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B32DDD02D261073006A7918 /* GoogleService-Info.plist */; };
 		9B32DDE12D261073006A7918 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B32DDC82D261073006A7918 /* Assets.xcassets */; };
@@ -82,6 +83,7 @@
 		9B0517112D18F03200ECCA06 /* TrackApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B0517212D18F03300ECCA06 /* TrackApplicationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackApplicationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B05172B2D18F03300ECCA06 /* TrackApplicationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackApplicationUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B30AB212D6ABFC20018D219 /* SplitRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRecorder.swift; sourceTree = "<group>"; };
 		9B32DDC52D261073006A7918 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9B32DDC82D261073006A7918 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B32DDC92D261073006A7918 /* AssignmentCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentCreationView.swift; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 		9B32DDDE2D261073006A7918 /* TrackApplication */ = {
 			isa = PBXGroup;
 			children = (
+				9B30AB212D6ABFC20018D219 /* SplitRecorder.swift */,
 				9BFA3B1E2D3C6077002B3DEB /* UserManager.swift */,
 				9BFA3B1C2D3C606C002B3DEB /* LogManager.swift */,
 				9BFA3B1A2D3C605B002B3DEB /* AssignmentManager.swift */,
@@ -425,6 +428,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B30AB222D6ABFC20018D219 /* SplitRecorder.swift in Sources */,
 				9B32DDE22D261073006A7918 /* GroupDetailView.swift in Sources */,
 				9B32DDE32D261073006A7918 /* StudentCatalogView.swift in Sources */,
 				9B32DDE42D261073006A7918 /* ContentView.swift in Sources */,

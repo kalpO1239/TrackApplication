@@ -74,7 +74,7 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 20)
 
-                NavigationLink(destination: HomeView().environmentObject(workoutDataManager), isActive: $isUserLoggedIn) {
+                NavigationLink(destination: HomeView().environmentObject(WorkoutDataManager.shared), isActive: $isUserLoggedIn) {
                     EmptyView()
                 }
             }

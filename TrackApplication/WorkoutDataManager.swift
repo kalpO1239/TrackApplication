@@ -5,16 +5,31 @@ class WorkoutDataManager: ObservableObject {
     static let shared = WorkoutDataManager()
     private init() {}
 
-    @Published var workoutData: [WorkoutEntry] = [] // ✅ Ensures SwiftUI updates when changed
-
+    @Published var workoutData: [WorkoutEntry] = [] // List of all workouts
+    @Published var weekMileage: [Int] = []  // Holds the mileage per week for graph
+    
+    // Updates the workout data and weekly mileage
     func addWorkout(date: Date, miles: Double, title: String, timeInMinutes: Int) {
         let newWorkout = WorkoutEntry(date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
         
         DispatchQueue.main.async {
-            self.workoutData.append(newWorkout) // ✅ Ensures UI updates immediately
+            self.workoutData.append(newWorkout)
+            self.updateWeekMileage()
+        }
+    }
+
+    func updateWeekMileage() {
+        let calendar = Calendar.current
+        
+        var weeklyMileage = [Int](repeating: 0, count: 7)
+        
+        // Group workouts by week
+        for workout in workoutData {
+            let weekOfYear = calendar.component(.weekOfYear, from: workout.date)
+            weeklyMileage[weekOfYear % 7] += Int(workout.miles)
         }
         
-        //addWorkoutToFirebase(workout: newWorkout)
+        self.weekMileage = weeklyMileage
     }
 
     func fetchWorkoutDataFromFirebase() {
@@ -38,27 +53,17 @@ class WorkoutDataManager: ObservableObject {
             }
 
             DispatchQueue.main.async {
-                self.workoutData = fetchedWorkouts // ✅ Updates UI when data is fetched
+                self.workoutData = fetchedWorkouts
+                self.updateWeekMileage()
             }
         }
     }
 }
 
-
-// ✅ FIX: Renamed 'Workout' to 'WorkoutEntry' to ensure consistency with LogView.swift
-struct WorkoutEntry: Identifiable, Equatable { // ✅ Added Equatable
+struct WorkoutEntry: Identifiable, Equatable {
     let id = UUID()
     let date: Date
     let miles: Double
     let title: String
     let timeInMinutes: Int
-
-    // ✅ Implement Equatable conformance
-    static func == (lhs: WorkoutEntry, rhs: WorkoutEntry) -> Bool {
-        return lhs.id == rhs.id &&
-               lhs.date == rhs.date &&
-               lhs.miles == rhs.miles &&
-               lhs.title == rhs.title &&
-               lhs.timeInMinutes == rhs.timeInMinutes
-    }
 }

@@ -16,6 +16,8 @@ struct LogView: View {
     @State private var date: Date = Date()
     @State private var isDatePickerExpanded: Bool = false
     
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
         VStack(spacing: 15) {
             Picker("Select Workout Type", selection: $selectedWorkoutType) {
@@ -109,13 +111,10 @@ struct LogView: View {
         let miles = Double(leftMiles) + Double(rightMiles) / 100.0
         let totalTime = (selectedHours * 3600) + (selectedMinutes * 60) + selectedSeconds + (selectedHundredths / 100)
 
-        // ✅ Ensure the function call includes all correct parameters
+        // Add workout to manager
         workoutDataManager.addWorkout(date: date, miles: miles, title: title, timeInMinutes: totalTime)
+        
+        // Navigate back to home view
+        presentationMode.wrappedValue.dismiss()
     }
-
-
 }
-
-
-
-
