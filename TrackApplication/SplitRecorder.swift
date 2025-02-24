@@ -37,7 +37,7 @@ struct SplitRecorder: View {
                 Text("Submit")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.indigo)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }

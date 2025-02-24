@@ -5,18 +5,21 @@ import GoogleSignIn
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    // Configure Firebase before anything else
-    FirebaseApp.configure()
-    return true
-  }
+    func application(
+            _ application: UIApplication,
+            didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+        ) -> Bool {
+            FirebaseApp.configure()
+            return true
+        }
 
-  func application(_ application: UIApplication, open url: URL,
-                   options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-    // Handle Google Sign-In URL
-    return GIDSignIn.sharedInstance.handle(url)
-  }
+        func application(
+            _ app: UIApplication,
+            open url: URL,
+            options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+        ) -> Bool {
+            return GIDSignIn.sharedInstance.handle(url)
+        }
 }
 
 @main

@@ -14,9 +14,9 @@ struct HomeView: View {
                 
                 ActivityLogButton()
                 
-                Spacer()
-
                 LogWorkoutButton()
+                
+                Spacer()
             }
             .navigationTitle("Home")
             .onAppear {
@@ -46,12 +46,6 @@ struct HomeView: View {
         self.weeks = dates
     }
 
-    func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd"
-        return formatter.string(from: date)
-    }
-
     func updateWeekMileage() {
         var mileageDict: [Date: Double] = [:]
 
@@ -73,6 +67,13 @@ struct WeeklyProgressView: View {
     let weekMileage: [Int]
     @Binding var selectedWeek: Int?
     @Binding var selectedMileage: Int
+
+    // Define formatDate function here
+    func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd"
+        return formatter.string(from: date)
+    }
 
     var body: some View {
         VStack {
@@ -103,7 +104,7 @@ struct WeeklyProgressView: View {
                             path.addLine(to: CGPoint(x: x, y: y))
                         }
                     }
-                    .stroke(Color.blue, lineWidth: 2)
+                    .stroke(Color(red:0.0,green:0.0,blue:0.5), lineWidth: 2)
 
                     ForEach(0..<weeks.count, id: \.self) { i in
                         let x = (geometry.size.width / CGFloat(weeks.count - 1)) * CGFloat(weeks.count - 1 - i)  // Reverse the x-axis order
@@ -118,11 +119,21 @@ struct WeeklyProgressView: View {
                                 selectedMileage = weekMileage[i]
                             }
                     }
+
+                    // Display the week labels on the x-axis
+                    ForEach(0..<weeks.count, id: \.self) { i in
+                        let x = (geometry.size.width / CGFloat(weeks.count - 1)) * CGFloat(weeks.count - 1 - i)
+                        Text(formatDate(weeks[i]))
+                            .font(.footnote)
+                            .foregroundColor(.black)
+                            .position(x: x, y: geometry.size.height + 10)
+                    }
                 }
             }
             .frame(height: 250)
             .border(Color.gray.opacity(0.3), width: 1)
             .padding(.horizontal, 15)
+            .padding(.vertical,25)
 
             if let selectedWeek = selectedWeek {
                 Text("Mileage: \(weekMileage[selectedWeek]) mi")
@@ -134,7 +145,6 @@ struct WeeklyProgressView: View {
     }
 }
 
-
 struct ActivityLogButton: View {
     var body: some View {
         Button(action: {}) {
@@ -145,7 +155,7 @@ struct ActivityLogButton: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(Color.blue)
+            .background(Color.blue.opacity(0.6))
             .foregroundColor(.white)
             .cornerRadius(12)
             .shadow(radius: 5)
@@ -161,7 +171,7 @@ struct LogWorkoutButton: View {
                 .font(.title2)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.green)
+                .background(Color(red:0.0,green:0.0,blue:0.5))
                 .foregroundColor(.white)
                 .cornerRadius(12)
                 .shadow(radius: 5)
