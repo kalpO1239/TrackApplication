@@ -61,14 +61,12 @@ struct HomeView: View {
         }
     }
 }
-
 struct WeeklyProgressView: View {
     let weeks: [Date]
     let weekMileage: [Int]
     @Binding var selectedWeek: Int?
     @Binding var selectedMileage: Int
 
-    // Define formatDate function here
     func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd"
@@ -82,58 +80,77 @@ struct WeeklyProgressView: View {
                 .foregroundColor(.white)
                 .padding(.bottom, 10)
 
-            ZStack {
-                GeometryReader { geometry in
+            GeometryReader { geometry in
+                let graphWidth = geometry.size.width - 50  // Leave space for the Y-axis labels
+                let graphHeight = geometry.size.height - 20 // Leave space for X-axis labels
+                let maxMileage = weekMileage.max() ?? 1
+                let scaleFactor = maxMileage > 0 ? graphHeight / CGFloat(maxMileage) : 1
+                let pointSpacing = weeks.count > 1 ? graphWidth / CGFloat(weeks.count - 1) : 0
+                
+                ZStack {
+                    // Draw Y-Axis
                     Path { path in
-                        let graphWidth = geometry.size.width
-                        let graphHeight = geometry.size.height
-                        let pointSpacing = graphWidth / CGFloat(weeks.count - 1)
+                        path.move(to: CGPoint(x: 40, y: 0))
+                        path.addLine(to: CGPoint(x: 40, y: graphHeight))
+                    }
+                    .stroke(Color.black, lineWidth: 1)
 
+                    // Y-Axis Labels
+                    ForEach(0...5, id: \.self) { i in
+                        let mileage = maxMileage * i / 5
+                        let y = graphHeight - CGFloat(mileage) * scaleFactor
+                        
+                        Text("\(mileage)")
+                            .font(.caption)
+                            .foregroundColor(.black)
+                            .position(x: 20, y: y)
+                    }
+
+                    // Draw Graph Line
+                    Path { path in
                         if weeks.isEmpty { return }
 
-                        let maxMileage = weekMileage.max() ?? 1
-                        let scaleFactor = graphHeight / CGFloat(maxMileage)
-
-                        let startX = pointSpacing * CGFloat(weeks.count - 1)  // Start at the farthest right
+                        let startX = pointSpacing * CGFloat(weeks.count - 1) + 40
                         let startY = graphHeight - CGFloat(weekMileage[0]) * scaleFactor
                         path.move(to: CGPoint(x: startX, y: startY))
 
                         for i in 1..<weeks.count {
-                            let x = pointSpacing * CGFloat(weeks.count - 1 - i) // Reverse the x-axis order
+                            let x = pointSpacing * CGFloat(weeks.count - 1 - i) + 40
                             let y = graphHeight - CGFloat(weekMileage[i]) * scaleFactor
                             path.addLine(to: CGPoint(x: x, y: y))
                         }
                     }
-                    .stroke(Color(red:0.0,green:0.0,blue:0.5), lineWidth: 2)
+                    .stroke(Color.blue, lineWidth: 2)
 
+                    // Data Points
                     ForEach(0..<weeks.count, id: \.self) { i in
-                        let x = (geometry.size.width / CGFloat(weeks.count - 1)) * CGFloat(weeks.count - 1 - i)  // Reverse the x-axis order
-                        let y = geometry.size.height - CGFloat(weekMileage[i]) * (geometry.size.height / CGFloat(weekMileage.max() ?? 0))
+                        let x = pointSpacing * CGFloat(weeks.count - 1 - i) + 40
+                        let y = graphHeight - CGFloat(weekMileage[i]) * scaleFactor
 
                         Circle()
                             .frame(width: 12, height: 12)
                             .position(x: x, y: y)
-                            .foregroundColor(selectedWeek == i ? .blue : .blue.opacity(0.7))
+                            .foregroundColor(selectedWeek == i ? .blue : .blue.opacity(0.6))
                             .onTapGesture {
                                 selectedWeek = i
                                 selectedMileage = weekMileage[i]
                             }
                     }
 
-                    // Display the week labels on the x-axis
+                    // X-Axis Labels
                     ForEach(0..<weeks.count, id: \.self) { i in
-                        let x = (geometry.size.width / CGFloat(weeks.count - 1)) * CGFloat(weeks.count - 1 - i)
+                        let x = pointSpacing * CGFloat(weeks.count - 1 - i) + 40
                         Text(formatDate(weeks[i]))
-                            .font(.footnote)
+                            .font(.system(size: 10))
                             .foregroundColor(.black)
-                            .position(x: x, y: geometry.size.height + 10)
+                            .position(x: x, y: graphHeight + 10)
                     }
                 }
             }
             .frame(height: 250)
             .border(Color.gray.opacity(0.3), width: 1)
             .padding(.horizontal, 15)
-            .padding(.vertical,25)
+            .padding(.vertical, 25)
 
             if let selectedWeek = selectedWeek {
                 Text("Mileage: \(weekMileage[selectedWeek]) mi")
@@ -144,6 +161,7 @@ struct WeeklyProgressView: View {
         }
     }
 }
+
 
 struct ActivityLogButton: View {
     var body: some View {
