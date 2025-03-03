@@ -1,22 +1,51 @@
 import Firebase
+import FirebaseAuth
 import FirebaseFirestore
 
 class WorkoutDataManager: ObservableObject {
     static let shared = WorkoutDataManager()
-    private init() {}
+   
 
+    private let db: Firestore
     @Published var workoutData: [WorkoutEntry] = [] // List of all workouts
     @Published var weekMileage: [Int] = []  // Holds the mileage per week for graph
     
+    init(db: Firestore = Firestore.firestore()) {
+          self.db = db
+      }
     // Updates the workout data and weekly mileage
     func addWorkout(date: Date, miles: Double, title: String, timeInMinutes: Int) {
         let newWorkout = WorkoutEntry(date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
         
+        // Create a Firestore reference
+        let db = Firestore.firestore()
+        
+        // Create a dictionary from the newWorkout object
+        let workoutData: [String: Any] = [
+            "date": newWorkout.date,
+            "miles": newWorkout.miles,
+            "title": newWorkout.title,
+            "timeInMinutes": newWorkout.timeInMinutes,
+            "userId": Auth.auth().currentUser?.uid ?? ""
+        ]
+        
+        
+        // Send the data to Firestore (e.g., to a collection named "workouts")
+        db.collection("workouts").addDocument(data: workoutData) { error in
+            if let error = error {
+                print("Error adding document: \(error)")
+            } else {
+                print("Document successfully added!")
+            }
+        }
+        
+        // Update the local workoutData and update the weekly mileage
         DispatchQueue.main.async {
             self.workoutData.append(newWorkout)
             self.updateWeekMileage()
         }
     }
+
 
     func updateWeekMileage() {
         let calendar = Calendar.current
@@ -34,7 +63,11 @@ class WorkoutDataManager: ObservableObject {
 
     func fetchWorkoutDataFromFirebase() {
         let db = Firestore.firestore()
-        db.collection("workouts").getDocuments { snapshot, error in
+        let userId = Auth.auth().currentUser?.uid ?? "" // Get the current user's ID
+
+        db.collection("workouts")
+            .whereField("userId", isEqualTo: userId)
+            .getDocuments { snapshot, error in
             if let error = error {
                 print("Error getting documents: \(error)")
                 return
@@ -61,6 +94,7 @@ class WorkoutDataManager: ObservableObject {
 }
 
 struct WorkoutEntry: Identifiable, Equatable {
+
     let id = UUID()
     let date: Date
     let miles: Double

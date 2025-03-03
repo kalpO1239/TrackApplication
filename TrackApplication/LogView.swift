@@ -1,4 +1,5 @@
 import SwiftUI
+import FirebaseAuth
 
 struct LogView: View {
     @EnvironmentObject var workoutDataManager: WorkoutDataManager
@@ -168,9 +169,16 @@ struct LogView: View {
     private func handleSubmit() {
         let miles = Double(leftMiles) + Double(rightMiles) / 100.0
         let totalTime = (selectedHours * 3600) + (selectedMinutes * 60) + selectedSeconds
-
+     
         // Add workout to manager
-        workoutDataManager.addWorkout(date: date, miles: miles, title: title, timeInMinutes: totalTime)
+        if Auth.auth().currentUser == nil {
+            // Handle the case where the user is not logged in
+            // Present a login screen or an alert.  Don't proceed with adding workout
+            return
+        } else {
+            // Proceed with adding workout
+            workoutDataManager.addWorkout(date: date, miles: miles, title: title, timeInMinutes: totalTime)
+        }
         
         // Navigate back to home view
         presentationMode.wrappedValue.dismiss()
