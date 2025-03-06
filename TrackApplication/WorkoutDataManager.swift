@@ -15,7 +15,8 @@ class WorkoutDataManager: ObservableObject {
       }
     // Updates the workout data and weekly mileage
     func addWorkout(date: Date, miles: Double, title: String, timeInMinutes: Int) {
-        let newWorkout = WorkoutEntry(date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
+        let userId = Auth.auth().currentUser?.uid ?? ""
+        let newWorkout = WorkoutEntry(id: userId, date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
         
         // Create a Firestore reference
         let db = Firestore.firestore()
@@ -80,7 +81,7 @@ class WorkoutDataManager: ObservableObject {
                    let miles = data["miles"] as? Double,
                    let timeInMinutes = data["timeInMinutes"] as? Int,
                    let timestamp = data["date"] as? Timestamp {
-                    let workout = WorkoutEntry(date: timestamp.dateValue(), miles: miles, title: title, timeInMinutes: timeInMinutes)
+                    let workout = WorkoutEntry(id: userId, date: timestamp.dateValue(), miles: miles, title: title, timeInMinutes: timeInMinutes)
                     fetchedWorkouts.append(workout)
                 }
             }
@@ -94,10 +95,14 @@ class WorkoutDataManager: ObservableObject {
 }
 
 struct WorkoutEntry: Identifiable, Equatable {
-
-    let id = UUID()
+    
+    let id: String
     let date: Date
     let miles: Double
     let title: String
     let timeInMinutes: Int
+    
+    static func == (lhs: WorkoutEntry, rhs: WorkoutEntry) -> Bool {
+           return lhs.id == rhs.id
+       }
 }
