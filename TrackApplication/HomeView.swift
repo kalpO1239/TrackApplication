@@ -20,11 +20,12 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
             .onAppear {
+              
                 initializeWeeks()
-                updateWeekMileage() // Update the mileage when the view appears
+                workoutDataManager.updateWeekMileage() // Update the mileage when the view appears
             }
             .onChange(of: workoutDataManager.workoutData) { _ in
-                updateWeekMileage() // Update when the workout data changes
+                updateWeekMileage() // Updatex when the workout data changes
             }
         }
     }

@@ -19,11 +19,11 @@ class WorkoutDataManager: ObservableObject {
         let newWorkout = WorkoutEntry(id: userId, date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
         
         // Create a Firestore reference
-        let db = Firestore.firestore()
+//        let db = Firestore.firestore()
         
         // Create a dictionary from the newWorkout object
         let workoutData: [String: Any] = [
-            "date": newWorkout.date,
+            "date": Timestamp(date: newWorkout.date),
             "miles": newWorkout.miles,
             "title": newWorkout.title,
             "timeInMinutes": newWorkout.timeInMinutes,
@@ -32,7 +32,7 @@ class WorkoutDataManager: ObservableObject {
         
         
         // Send the data to Firestore (e.g., to a collection named "workouts")
-        db.collection("workouts").addDocument(data: workoutData) { error in
+        self.db.collection("workouts").addDocument(data: workoutData) { error in
             if let error = error {
                 print("Error adding document: \(error)")
             } else {
@@ -49,6 +49,7 @@ class WorkoutDataManager: ObservableObject {
 
 
     func updateWeekMileage() {
+        fetchWorkoutDataFromFirebase()
         let calendar = Calendar.current
         
         var weeklyMileage = [Int](repeating: 0, count: 7)
@@ -63,10 +64,10 @@ class WorkoutDataManager: ObservableObject {
     }
 
     func fetchWorkoutDataFromFirebase() {
-        let db = Firestore.firestore()
+//        let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid ?? "" // Get the current user's ID
 
-        db.collection("workouts")
+        self.db.collection("workouts")
             .whereField("userId", isEqualTo: userId)
             .getDocuments { snapshot, error in
             if let error = error {
