@@ -166,18 +166,15 @@ struct WeeklyProgressView: View {
 
 struct ActivityLogButton: View {
     var body: some View {
-        Button(action: {}) {
-            HStack {
-                Image(systemName: "list.bullet")
-                Text("Activity Log")
-                    .font(.title2)
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.blue.opacity(0.6))
-            .foregroundColor(.white)
-            .cornerRadius(12)
-            .shadow(radius: 5)
+        NavigationLink(destination: ActivityLogView()) {
+            Text("Activity Log")
+                .font(.title2)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue.opacity(0.6))
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                .shadow(radius: 5)
         }
         .padding(.horizontal, 20)
     }

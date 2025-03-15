@@ -15,95 +15,112 @@ class WorkoutDataManager: ObservableObject {
       }
     // Updates the workout data and weekly mileage
     func addWorkout(date: Date, miles: Double, title: String, timeInMinutes: Int) {
-        let userId = Auth.auth().currentUser?.uid ?? ""
-        let newWorkout = WorkoutEntry(id: userId, date: date, miles: miles, title: title, timeInMinutes: timeInMinutes)
-        
-        // Create a Firestore reference
-//        let db = Firestore.firestore()
-        
-        // Create a dictionary from the newWorkout object
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("No user logged in")
+            return
+        }
+
         let workoutData: [String: Any] = [
-            "date": Timestamp(date: newWorkout.date),
-            "miles": newWorkout.miles,
-            "title": newWorkout.title,
-            "timeInMinutes": newWorkout.timeInMinutes,
-            "userId": Auth.auth().currentUser?.uid ?? ""
+            "date": Timestamp(date: date),
+            "miles": miles,
+            "title": title,
+            "timeInMinutes": timeInMinutes,
+            "userId": userId
         ]
-        
-        
-        // Send the data to Firestore (e.g., to a collection named "workouts")
-        self.db.collection("workouts").addDocument(data: workoutData) { error in
+
+        db.collection("workouts").addDocument(data: workoutData) { error in
             if let error = error {
                 print("Error adding document: \(error)")
             } else {
-                print("Document successfully added!")
+                print("Workout successfully added!")
             }
-        }
-        
-        // Update the local workoutData and update the weekly mileage
-        DispatchQueue.main.async {
-            self.workoutData.append(newWorkout)
-            self.updateWeekMileage()
         }
     }
 
 
+
+
     func updateWeekMileage() {
-        fetchWorkoutDataFromFirebase()
         let calendar = Calendar.current
-        
         var weeklyMileage = [Int](repeating: 0, count: 7)
         
-        // Group workouts by week
         for workout in workoutData {
             let weekOfYear = calendar.component(.weekOfYear, from: workout.date)
             weeklyMileage[weekOfYear % 7] += Int(workout.miles)
         }
         
-        self.weekMileage = weeklyMileage
+        DispatchQueue.main.async {
+            self.weekMileage = weeklyMileage
+        }
     }
 
+
+    func fetchWorkoutsForUser() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("No user logged in")
+            return
+        }
+
+        db.collection("workouts")
+            .whereField("userId", isEqualTo: userId)
+            .order(by: "date", descending: true)
+            .addSnapshotListener { snapshot, error in
+                if let error = error {
+                    print("Error fetching workouts: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let documents = snapshot?.documents else {
+                    print("No workout data found")
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    self.workoutData = documents.compactMap { doc in
+                        try? doc.data(as: WorkoutEntry.self)  // ✅ Firestore auto-fills `id`
+                    }
+                }
+            }
+    }
+
+
+    
     func fetchWorkoutDataFromFirebase() {
-//        let db = Firestore.firestore()
-        let userId = Auth.auth().currentUser?.uid ?? "" // Get the current user's ID
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("No user logged in")
+            return
+        }
 
         self.db.collection("workouts")
             .whereField("userId", isEqualTo: userId)
             .getDocuments { snapshot, error in
-            if let error = error {
-                print("Error getting documents: \(error)")
-                return
-            }
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                    return
+                }
 
-            var fetchedWorkouts: [WorkoutEntry] = []
-            for document in snapshot!.documents {
-                let data = document.data()
-                if let title = data["title"] as? String,
-                   let miles = data["miles"] as? Double,
-                   let timeInMinutes = data["timeInMinutes"] as? Int,
-                   let timestamp = data["date"] as? Timestamp {
-                    let workout = WorkoutEntry(id: userId, date: timestamp.dateValue(), miles: miles, title: title, timeInMinutes: timeInMinutes)
-                    fetchedWorkouts.append(workout)
+                let fetchedWorkouts: [WorkoutEntry] = snapshot?.documents.compactMap { doc in
+                    try? doc.data(as: WorkoutEntry.self)  // ✅ Firestore auto-fills `id`
+                } ?? []
+
+                DispatchQueue.main.async {
+                    self.workoutData = fetchedWorkouts
+                    self.updateWeekMileage()
                 }
             }
-
-            DispatchQueue.main.async {
-                self.workoutData = fetchedWorkouts
-                self.updateWeekMileage()
-            }
-        }
     }
+
 }
 
-struct WorkoutEntry: Identifiable, Equatable {
-    
-    let id: String
-    let date: Date
-    let miles: Double
-    let title: String
-    let timeInMinutes: Int
-    
+struct WorkoutEntry: Identifiable, Codable, Equatable {
+    @DocumentID var id: String?  // Firestore document ID (optional)
+    var date: Date
+    var miles: Double
+    var title: String
+    var timeInMinutes: Int
+    var userId: String  // Include userId so Firestore can store it
+
     static func == (lhs: WorkoutEntry, rhs: WorkoutEntry) -> Bool {
-           return lhs.id == rhs.id
-       }
+        return lhs.id == rhs.id
+    }
 }

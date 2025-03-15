@@ -56,6 +56,7 @@
 		9B32DDF32D261073006A7918 /* TrackApplicationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDC2D261073006A7918 /* TrackApplicationApp.swift */; };
 		9B32DDF42D261073006A7918 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD82D261073006A7918 /* LogViewController.swift */; };
 		9B32DDF52D261073006A7918 /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */; };
+		9B7ECAFA2D85DE5000C6AC87 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7ECAF92D85DE5000C6AC87 /* ActivityLogView.swift */; };
 		9BFA3B1B2D3C605B002B3DEB /* AssignmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFA3B1A2D3C605B002B3DEB /* AssignmentManager.swift */; };
 		9BFA3B1D2D3C606C002B3DEB /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFA3B1C2D3C606C002B3DEB /* LogManager.swift */; };
 		9BFA3B1F2D3C6077002B3DEB /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFA3B1E2D3C6077002B3DEB /* UserManager.swift */; };
@@ -106,6 +107,7 @@
 		9B32DDDB2D261073006A7918 /* StudentCatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentCatalogView.swift; sourceTree = "<group>"; };
 		9B32DDDC2D261073006A7918 /* TrackApplicationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackApplicationApp.swift; sourceTree = "<group>"; };
 		9B32DDDD2D261073006A7918 /* WorkoutDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDataManager.swift; sourceTree = "<group>"; };
+		9B7ECAF92D85DE5000C6AC87 /* ActivityLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLogView.swift; sourceTree = "<group>"; };
 		9BA94C662D6BFA0D00AA2BDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9BFA3B1A2D3C605B002B3DEB /* AssignmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentManager.swift; sourceTree = "<group>"; };
 		9BFA3B1C2D3C606C002B3DEB /* LogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 		9B32DDDE2D261073006A7918 /* TrackApplication */ = {
 			isa = PBXGroup;
 			children = (
+				9B7ECAF92D85DE5000C6AC87 /* ActivityLogView.swift */,
 				9BA94C662D6BFA0D00AA2BDF /* Info.plist */,
 				9B30AB212D6ABFC20018D219 /* SplitRecorder.swift */,
 				9BFA3B1E2D3C6077002B3DEB /* UserManager.swift */,
@@ -441,6 +444,7 @@
 				9B32DDEA2D261073006A7918 /* GraphViewController.swift in Sources */,
 				9B32DDEB2D261073006A7918 /* LogView.swift in Sources */,
 				9B32DDEC2D261073006A7918 /* CoachLogin.swift in Sources */,
+				9B7ECAFA2D85DE5000C6AC87 /* ActivityLogView.swift in Sources */,
 				9BFA3B1D2D3C606C002B3DEB /* LogManager.swift in Sources */,
 				9B32DDED2D261073006A7918 /* AssignmentCreationView.swift in Sources */,
 				9B32DDEE2D261073006A7918 /* PriorAssignmentsView.swift in Sources */,
