@@ -24,6 +24,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct TrackApplicationApp: App {
+    @StateObject var groupManager = GroupManager()
   // Register app delegate for Firebase setup
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
@@ -31,6 +32,7 @@ struct TrackApplicationApp: App {
     WindowGroup {
       NavigationView {
         RoleSelectionView()
+          .environmentObject(groupManager)
           .onOpenURL { url in
             // Handle the URL to complete the sign-in process
             GIDSignIn.sharedInstance.handle(url)

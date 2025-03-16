@@ -3,6 +3,8 @@ import FirebaseAuth
 import GoogleSignIn
 
 struct CoachLogin: View {
+    @StateObject var authManager = AuthManager.shared  // Make sure AuthManager is a @StateObject
+    @StateObject var groupManager = GroupManager()
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var errorMessage: String?
@@ -73,7 +75,7 @@ struct CoachLogin: View {
                 }
                 .padding(.bottom, 20)
 
-                NavigationLink(destination: GroupDetailView(groupName: "base" ), isActive: $isUserLoggedIn) {
+                NavigationLink(destination: GroupDetailView(groupName: "base" ).environmentObject(authManager).environmentObject(groupManager), isActive: $isUserLoggedIn) {
                     EmptyView()
                 }
             }

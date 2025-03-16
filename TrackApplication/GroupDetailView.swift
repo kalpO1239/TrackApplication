@@ -10,30 +10,35 @@ import SwiftUI
 
 struct GroupDetailView: View {
     let groupName: String
-
+    
     var body: some View {
         TabView {
             StudentCatalogView()
                 .tabItem {
                     Image(systemName: "person.3.fill")
                     Text("Students")
-                        
+                    
                 }
-                
-
+            
+            
             AssignmentCreationView()
                 .tabItem {
                     Image(systemName: "square.and.pencil")
                     Text("Create Assignment")
                 }
-
+            
             PriorAssignmentsView()
                 .tabItem {
                     Image(systemName: "clock.fill")
                     Text("Prior Assignments")
                 }
+            CreateGroupView()
+                .tabItem{
+                    Image(systemName: "person.2.fill")
+                    Text("Group")
+                }
+                .navigationTitle(groupName)
         }
-        .navigationTitle(groupName)
     }
 }
 

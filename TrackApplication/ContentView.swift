@@ -3,7 +3,8 @@ import FirebaseAuth
 import GoogleSignIn
 
 struct ContentView: View {
-    @StateObject var workoutDataManager = WorkoutDataManager.shared 
+    @StateObject var workoutDataManager = WorkoutDataManager.shared
+    @StateObject var groupManager = GroupManager()
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var errorMessage: String?
@@ -74,7 +75,7 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 20)
 
-                NavigationLink(destination: HomeView().environmentObject(WorkoutDataManager.shared).navigationBarBackButtonHidden(true), isActive: $isUserLoggedIn) {
+                NavigationLink(destination: HomeView().environmentObject(WorkoutDataManager.shared).environmentObject(groupManager).navigationBarBackButtonHidden(true), isActive: $isUserLoggedIn) {
                     EmptyView()
                 }
             }

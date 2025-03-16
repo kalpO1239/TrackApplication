@@ -16,6 +16,8 @@ struct HomeView: View {
                 
                 LogWorkoutButton()
                 
+                JoinGroupViewButton()
+                
                 Spacer()
             }
             .navigationTitle("Home")
@@ -168,6 +170,22 @@ struct ActivityLogButton: View {
     var body: some View {
         NavigationLink(destination: ActivityLogView()) {
             Text("Activity Log")
+                .font(.title2)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue.opacity(0.6))
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                .shadow(radius: 5)
+        }
+        .padding(.horizontal, 20)
+    }
+}
+
+struct JoinGroupViewButton: View {
+    var body: some View {
+        NavigationLink(destination: JoinGroupView()) {
+            Text("Join Group")
                 .font(.title2)
                 .frame(maxWidth: .infinity)
                 .padding()
