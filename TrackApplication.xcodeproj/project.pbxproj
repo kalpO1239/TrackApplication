@@ -44,15 +44,12 @@
 		9B32DDE72D261073006A7918 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCD2D261073006A7918 /* CreateAccountView.swift */; };
 		9B32DDE82D261073006A7918 /* RoleSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDA2D261073006A7918 /* RoleSelectionView.swift */; };
 		9B32DDE92D261073006A7918 /* AssignmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCA2D261073006A7918 /* AssignmentDetailView.swift */; };
-		9B32DDEA2D261073006A7918 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD32D261073006A7918 /* GraphViewController.swift */; };
 		9B32DDEB2D261073006A7918 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD72D261073006A7918 /* LogView.swift */; };
 		9B32DDEC2D261073006A7918 /* CoachLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCB2D261073006A7918 /* CoachLogin.swift */; };
 		9B32DDED2D261073006A7918 /* AssignmentCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDC92D261073006A7918 /* AssignmentCreationView.swift */; };
 		9B32DDEE2D261073006A7918 /* PriorAssignmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD92D261073006A7918 /* PriorAssignmentsView.swift */; };
 		9B32DDEF2D261073006A7918 /* WorkoutDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDD2D261073006A7918 /* WorkoutDataManager.swift */; };
 		9B32DDF02D261073006A7918 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */; };
-		9B32DDF12D261073006A7918 /* LogDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD62D261073006A7918 /* LogDataModel.swift */; };
-		9B32DDF22D261073006A7918 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD22D261073006A7918 /* GraphView.swift */; };
 		9B32DDF32D261073006A7918 /* TrackApplicationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDC2D261073006A7918 /* TrackApplicationApp.swift */; };
 		9B32DDF42D261073006A7918 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD82D261073006A7918 /* LogViewController.swift */; };
 		9B32DDF52D261073006A7918 /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */; };
@@ -99,11 +96,8 @@
 		9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		9B32DDD02D261073006A7918 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInButton.swift; sourceTree = "<group>"; };
-		9B32DDD22D261073006A7918 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
-		9B32DDD32D261073006A7918 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		9B32DDD42D261073006A7918 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 		9B32DDD52D261073006A7918 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		9B32DDD62D261073006A7918 /* LogDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDataModel.swift; sourceTree = "<group>"; };
 		9B32DDD72D261073006A7918 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		9B32DDD82D261073006A7918 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		9B32DDD92D261073006A7918 /* PriorAssignmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorAssignmentsView.swift; sourceTree = "<group>"; };
@@ -253,11 +247,8 @@
 				9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */,
 				9B32DDD02D261073006A7918 /* GoogleService-Info.plist */,
 				9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */,
-				9B32DDD22D261073006A7918 /* GraphView.swift */,
-				9B32DDD32D261073006A7918 /* GraphViewController.swift */,
 				9B32DDD42D261073006A7918 /* GroupDetailView.swift */,
 				9B32DDD52D261073006A7918 /* HomeView.swift */,
-				9B32DDD62D261073006A7918 /* LogDataModel.swift */,
 				9B32DDD72D261073006A7918 /* LogView.swift */,
 				9B32DDD82D261073006A7918 /* LogViewController.swift */,
 				9B32DDD92D261073006A7918 /* PriorAssignmentsView.swift */,
@@ -454,7 +445,6 @@
 				9BFA3B1F2D3C6077002B3DEB /* UserManager.swift in Sources */,
 				9B32DDE82D261073006A7918 /* RoleSelectionView.swift in Sources */,
 				9B32DDE92D261073006A7918 /* AssignmentDetailView.swift in Sources */,
-				9B32DDEA2D261073006A7918 /* GraphViewController.swift in Sources */,
 				9B32DDEB2D261073006A7918 /* LogView.swift in Sources */,
 				9B7ECAFE2D87616700C6AC87 /* GroupManager.swift in Sources */,
 				9B32DDEC2D261073006A7918 /* CoachLogin.swift in Sources */,
@@ -466,8 +456,6 @@
 				9B7ECB022D8763C600C6AC87 /* CreateGroupView.swift in Sources */,
 				9B32DDEF2D261073006A7918 /* WorkoutDataManager.swift in Sources */,
 				9B32DDF02D261073006A7918 /* FirebaseAuthManager.swift in Sources */,
-				9B32DDF12D261073006A7918 /* LogDataModel.swift in Sources */,
-				9B32DDF22D261073006A7918 /* GraphView.swift in Sources */,
 				9B32DDF32D261073006A7918 /* TrackApplicationApp.swift in Sources */,
 				9B32DDF42D261073006A7918 /* LogViewController.swift in Sources */,
 				9B32DDF52D261073006A7918 /* GoogleSignInButton.swift in Sources */,
