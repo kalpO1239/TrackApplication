@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 
 struct HomeView: View {
     @EnvironmentObject var workoutDataManager: WorkoutDataManager
@@ -22,9 +23,9 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
             .onAppear {
-              
+                workoutDataManager.fetchWorkoutsForUser()
                 initializeWeeks()
-                workoutDataManager.updateWeekMileage() // Update the mileage when the view appears
+                //workoutDataManager.updateWeekMileage() // Update the mileage when the view appears
             }
             .onChange(of: workoutDataManager.workoutData) { _ in
                 updateWeekMileage() // Updatex when the workout data changes
@@ -64,11 +65,18 @@ struct HomeView: View {
         }
     }
 }
+
+
 struct WeeklyProgressView: View {
     let weeks: [Date]
     let weekMileage: [Int]
     @Binding var selectedWeek: Int?
     @Binding var selectedMileage: Int
+
+    // Create a data model for chart
+    var data: [(date: Date, mileage: Int)] {
+        zip(weeks, weekMileage).map { ($0, $1) }
+    }
 
     func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
@@ -77,90 +85,47 @@ struct WeeklyProgressView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text("Weekly Progress")
-                .font(.title)
-                .foregroundColor(.white)
-                .padding(.bottom, 10)
+                .font(.headline)
+                .padding(.leading)
 
-            GeometryReader { geometry in
-                let graphWidth = geometry.size.width - 50  // Leave space for the Y-axis labels
-                let graphHeight = geometry.size.height - 20 // Leave space for X-axis labels
-                let maxMileage = weekMileage.max() ?? 1
-                let scaleFactor = maxMileage > 0 ? graphHeight / CGFloat(maxMileage) : 1
-                let pointSpacing = weeks.count > 1 ? graphWidth / CGFloat(weeks.count - 1) : 0
-                
-                ZStack {
-                    // Draw Y-Axis
-                    Path { path in
-                        path.move(to: CGPoint(x: 40, y: 0))
-                        path.addLine(to: CGPoint(x: 40, y: graphHeight))
-                    }
-                    .stroke(Color.black, lineWidth: 1)
+            // Create the chart
+            Chart(data, id: \.date) { entry in
+                // Calculate the y-value, ensuring it's never below 0
+                let clampedMileage = max(Double(entry.mileage), 0)
 
-                    // Y-Axis Labels
-                    ForEach(0...5, id: \.self) { i in
-                        let mileage = maxMileage * i / 5
-                        let y = graphHeight - CGFloat(mileage) * scaleFactor
-                        
-                        Text("\(mileage)")
-                            .font(.caption)
-                            .foregroundColor(.black)
-                            .position(x: 20, y: y)
-                    }
+                // Line Mark
+                LineMark(
+                    x: .value("Week Start", entry.date),
+                    y: .value("Miles", clampedMileage)
+                )
+                .interpolationMethod(.catmullRom) // Ensure smooth lines without dips below 0
+                .foregroundStyle(Gradient(colors: [.blue.opacity(0.6), Color(red: 0.0, green: 0.0, blue: 0.5)]))
+                .lineStyle(StrokeStyle(lineWidth: 3))
 
-                    // Draw Graph Line
-                    Path { path in
-                        if weeks.isEmpty { return }
+                // Area Mark (gradient under the line)
+                AreaMark(
+                    x: .value("Week Start", entry.date),
+                    y: .value("Miles", clampedMileage)
+                )
+                .interpolationMethod(.catmullRom)
+                .foregroundStyle(LinearGradient(
+                    gradient: Gradient(colors: [.blue.opacity(0.2), Color(red: 0.0, green: 0.0, blue: 0.5).opacity(0.2)]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                ))
 
-                        let startX = pointSpacing * CGFloat(weeks.count - 1) + 40
-                        let startY = graphHeight - CGFloat(weekMileage[0]) * scaleFactor
-                        path.move(to: CGPoint(x: startX, y: startY))
-
-                        for i in 1..<weeks.count {
-                            let x = pointSpacing * CGFloat(weeks.count - 1 - i) + 40
-                            let y = graphHeight - CGFloat(weekMileage[i]) * scaleFactor
-                            path.addLine(to: CGPoint(x: x, y: y))
-                        }
-                    }
-                    .stroke(Color.blue, lineWidth: 2)
-
-                    // Data Points
-                    ForEach(0..<weeks.count, id: \.self) { i in
-                        let x = pointSpacing * CGFloat(weeks.count - 1 - i) + 40
-                        let y = graphHeight - CGFloat(weekMileage[i]) * scaleFactor
-
-                        Circle()
-                            .frame(width: 12, height: 12)
-                            .position(x: x, y: y)
-                            .foregroundColor(selectedWeek == i ? .blue : .blue.opacity(0.6))
-                            .onTapGesture {
-                                selectedWeek = i
-                                selectedMileage = weekMileage[i]
-                            }
-                    }
-
-                    // X-Axis Labels
-                    ForEach(0..<weeks.count, id: \.self) { i in
-                        let x = pointSpacing * CGFloat(weeks.count - 1 - i) + 40
-                        Text(formatDate(weeks[i]))
-                            .font(.system(size: 10))
-                            .foregroundColor(.black)
-                            .position(x: x, y: graphHeight + 10)
-                    }
-                }
+                // Point Mark
+                PointMark(
+                    x: .value("Week Start", entry.date),
+                    y: .value("Miles", clampedMileage)
+                )
+                .foregroundStyle(.blue)
+                .symbolSize(50)
             }
             .frame(height: 250)
-            .border(Color.gray.opacity(0.3), width: 1)
-            .padding(.horizontal, 15)
-            .padding(.vertical, 25)
-
-            if let selectedWeek = selectedWeek {
-                Text("Mileage: \(weekMileage[selectedWeek]) mi")
-                    .font(.title2)
-                    .foregroundColor(.black)
-                    .padding(.top, 10)
-            }
+            .padding()
         }
     }
 }
