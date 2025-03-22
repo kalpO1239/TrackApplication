@@ -74,16 +74,9 @@ struct JoinGroupView: View {
             let groupId = document.documentID
             let groupRef = db.collection("groups").document(groupId)
             
-            // Create the member object
-            let newMember = [
-                "userId": userId,
-                "userName": userName
-            ]
-            
-            // Update group with the new member and add the userId to athleteIds array
             groupRef.updateData([
-                "members": FieldValue.arrayUnion([newMember]), // Add member object to array
-                "athleteIds": FieldValue.arrayUnion([userId]) // Add userId to athleteIds array
+                "members.\(userId)": userName, // Store userId as key and name as value
+                "athleteIds": FieldValue.arrayUnion([userId]) // Store userId in athleteIds array
             ]) { error in
                 if let error = error {
                     errorMessage = "Error joining group: \(error.localizedDescription)"
@@ -93,7 +86,6 @@ struct JoinGroupView: View {
             }
         }
     }
-
 }
 
 struct JoinGroupView_Previews: PreviewProvider {
