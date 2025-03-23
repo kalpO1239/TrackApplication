@@ -25,7 +25,7 @@ struct AssignmentCreationView: View {
                     Text("Fetch Students")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color(red:0.0,green:0.0,blue:0.5))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -40,14 +40,14 @@ struct AssignmentCreationView: View {
                         }
                     ))
 
-                    ForEach(students, id: \.self) { student in
-                        Toggle(student, isOn: Binding(
-                            get: { selectedStudents.contains(student) },
+                    ForEach(students, id: \.self) { studentId in
+                        Toggle(studentMap[studentId] ?? "Unknown", isOn: Binding(
+                            get: { selectedStudents.contains(studentId) },
                             set: { isSelected in
                                 if isSelected {
-                                    selectedStudents.append(student)
+                                    selectedStudents.append(studentId)
                                 } else {
-                                    selectedStudents.removeAll { $0 == student }
+                                    selectedStudents.removeAll { $0 == studentId }
                                 }
                             }
                         ))
@@ -67,7 +67,7 @@ struct AssignmentCreationView: View {
                 Text("Submit Assignment")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.green)
+                    .background(Color.blue.opacity(0.6))
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
@@ -85,7 +85,8 @@ struct AssignmentCreationView: View {
         }
     }
 
-    /// Fetch students from Firebase based on coach ID and group name
+    @State private var studentMap: [String: String] = [:] // Maps athleteId → Name
+
     private func fetchStudents() {
         guard let coachId = coachId else {
             print("Coach ID not found")
@@ -107,20 +108,11 @@ struct AssignmentCreationView: View {
                     return
                 }
 
-                // Fetch the members map from the group document
                 if let members = document.data()["members"] as? [String: String] {
-                    // Initialize an empty array to store student names
-                    var studentNames: [String] = []
-
-                    // Loop through the members map and fetch the names (values) using athleteId (keys)
-                    for (_, studentName) in members {
-                        studentNames.append(studentName)
-                    }
-
-                    // Update the students list with the names and show students
                     DispatchQueue.main.async {
-                        self.students = studentNames
-                        self.showStudents = true  // Display students after fetching
+                        self.studentMap = members  // Store ID → Name mapping
+                        self.students = Array(members.keys)  // Store only IDs in `students`
+                        self.showStudents = true
                     }
                 } else {
                     print("No members found in the group")
@@ -130,11 +122,48 @@ struct AssignmentCreationView: View {
 
 
 
+
     /// Create an assignment
     private func createAssignment() {
+        guard !inputGroupName.isEmpty else {
+            print("Group name is required")
+            return
+        }
+
+        guard !selectedStudents.isEmpty else {
+            print("No students selected")
+            return
+        }
+
+        guard let coachId = coachId else {
+            print("Coach ID not found")
+            return
+        }
+
         assignmentFields = fieldsInput.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-        print("Assignment Created:", title, assignmentFields, dueDate, selectedStudents)
+
+        let db = Firestore.firestore()
+
+        let assignmentData: [String: Any] = [
+            "athleteIds": selectedStudents,  // Now contains IDs instead of names
+            "groupId": inputGroupName,
+            "reps": assignmentFields,
+            "responses": [:],
+            "coachId": coachId,
+            "title": title,
+            "dueDate": Timestamp(date: dueDate)
+        ]
+
+        db.collection("assignments").addDocument(data: assignmentData) { error in
+            if let error = error {
+                print("Error adding assignment: \(error.localizedDescription)")
+            } else {
+                print("Assignment successfully created with athlete IDs!")
+            }
+        }
     }
+
+
 }
 
 #Preview {
