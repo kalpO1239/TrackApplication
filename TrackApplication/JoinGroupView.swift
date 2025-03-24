@@ -53,39 +53,82 @@ struct JoinGroupView: View {
             errorMessage = "User not logged in."
             return
         }
-        
+
         guard !userName.isEmpty else {
             errorMessage = "Please enter your name."
             return
         }
-        
+
         let db = Firestore.firestore()
         db.collection("groups").whereField("code", isEqualTo: joinCode).getDocuments { snapshot, error in
             if let error = error {
                 errorMessage = "Error finding group: \(error.localizedDescription)"
                 return
             }
-            
+
             guard let document = snapshot?.documents.first else {
                 errorMessage = "Invalid group code."
                 return
             }
-            
+
             let groupId = document.documentID
-            let groupRef = db.collection("groups").document(groupId)
+            let groupData = document.data()
             
+            guard let groupName = groupData["name"] as? String else {
+                errorMessage = "Group name not found."
+                return
+            }
+
+            let groupRef = db.collection("groups").document(groupId)
+
+            // Add user to the group
             groupRef.updateData([
                 "members.\(userId)": userName, // Store userId as key and name as value
                 "athleteIds": FieldValue.arrayUnion([userId]) // Store userId in athleteIds array
             ]) { error in
                 if let error = error {
                     errorMessage = "Error joining group: \(error.localizedDescription)"
-                } else {
-                    errorMessage = nil // Successfully joined the group
+                    return
+                }
+
+                let orgRef = db.collection("orgs").document(userId)
+
+                // Check if the orgs document exists
+                orgRef.getDocument { (doc, error) in
+                    if let error = error {
+                        errorMessage = "Error checking orgs: \(error.localizedDescription)"
+                        return
+                    }
+
+                    if doc?.exists == true {
+                        // If orgs document exists, update the groups array
+                        orgRef.updateData([
+                            "groups": FieldValue.arrayUnion([groupName])
+                        ]) { error in
+                            if let error = error {
+                                errorMessage = "Error updating orgs: \(error.localizedDescription)"
+                            } else {
+                                errorMessage = nil // Successfully updated existing orgs
+                            }
+                        }
+                    } else {
+                        // If orgs document doesn't exist, create a new one with the group name as the first element
+                        orgRef.setData([
+                            "groups": [groupName]
+                        ]) { error in
+                            if let error = error {
+                                errorMessage = "Error creating orgs: \(error.localizedDescription)"
+                            } else {
+                                errorMessage = nil // Successfully created new orgs document
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+
+
 }
 
 struct JoinGroupView_Previews: PreviewProvider {
