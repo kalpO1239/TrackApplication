@@ -43,7 +43,6 @@
 		9B32DDE62D261073006A7918 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD52D261073006A7918 /* HomeView.swift */; };
 		9B32DDE72D261073006A7918 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCD2D261073006A7918 /* CreateAccountView.swift */; };
 		9B32DDE82D261073006A7918 /* RoleSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDA2D261073006A7918 /* RoleSelectionView.swift */; };
-		9B32DDE92D261073006A7918 /* AssignmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCA2D261073006A7918 /* AssignmentDetailView.swift */; };
 		9B32DDEB2D261073006A7918 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD72D261073006A7918 /* LogView.swift */; };
 		9B32DDEC2D261073006A7918 /* CoachLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCB2D261073006A7918 /* CoachLogin.swift */; };
 		9B32DDED2D261073006A7918 /* AssignmentCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDC92D261073006A7918 /* AssignmentCreationView.swift */; };
@@ -88,7 +87,6 @@
 		9B32DDC52D261073006A7918 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9B32DDC82D261073006A7918 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B32DDC92D261073006A7918 /* AssignmentCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentCreationView.swift; sourceTree = "<group>"; };
-		9B32DDCA2D261073006A7918 /* AssignmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentDetailView.swift; sourceTree = "<group>"; };
 		9B32DDCB2D261073006A7918 /* CoachLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachLogin.swift; sourceTree = "<group>"; };
 		9B32DDCC2D261073006A7918 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9B32DDCD2D261073006A7918 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
@@ -239,7 +237,6 @@
 				9B32DDC72D261073006A7918 /* StudentView */,
 				9B32DDC82D261073006A7918 /* Assets.xcassets */,
 				9B32DDC92D261073006A7918 /* AssignmentCreationView.swift */,
-				9B32DDCA2D261073006A7918 /* AssignmentDetailView.swift */,
 				9B32DDCB2D261073006A7918 /* CoachLogin.swift */,
 				9B32DDCC2D261073006A7918 /* ContentView.swift */,
 				9B32DDCD2D261073006A7918 /* CreateAccountView.swift */,
@@ -444,7 +441,6 @@
 				9B32DDE72D261073006A7918 /* CreateAccountView.swift in Sources */,
 				9BFA3B1F2D3C6077002B3DEB /* UserManager.swift in Sources */,
 				9B32DDE82D261073006A7918 /* RoleSelectionView.swift in Sources */,
-				9B32DDE92D261073006A7918 /* AssignmentDetailView.swift in Sources */,
 				9B32DDEB2D261073006A7918 /* LogView.swift in Sources */,
 				9B7ECAFE2D87616700C6AC87 /* GroupManager.swift in Sources */,
 				9B32DDEC2D261073006A7918 /* CoachLogin.swift in Sources */,
