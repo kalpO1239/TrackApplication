@@ -3,7 +3,7 @@ import Firebase
 import FirebaseAuth
 
 struct PriorAssignmentsView: View {
-    @State private var groupedAssignments: [String: [(String, String)]] = [:] // [dueDate: [(assignmentId, groupId)]]
+    @State private var groupedAssignments: [String: [(String, String, Timestamp)]] = [:] // [dueDate: [(assignmentId, groupId, dueDateTimestamp)]]
     @State private var isLoading = false
 
     var body: some View {
@@ -22,9 +22,10 @@ struct PriorAssignmentsView: View {
                     List {
                         ForEach(groupedAssignments.keys.sorted(), id: \.self) { dueDate in
                             Section(header: Text(dueDate)) {
-                                ForEach(groupedAssignments[dueDate] ?? [], id: \.0) { assignmentId, groupId in
-                                    NavigationLink(destination: AssignmentDetailView(assignmentId: assignmentId)) {
-                                        Text("Assignment ID: \(assignmentId)")
+                                ForEach(groupedAssignments[dueDate] ?? [], id: \.0) { assignmentId, groupId, _ in
+                                    NavigationLink(destination: AssignmentDetailView(assignmentId: assignmentId, groupId: groupId)) {
+                                        // Display the group name and due date
+                                        Text("Group: \(groupId), Due: \(dueDate)")
                                     }
                                 }
                             }
@@ -59,7 +60,7 @@ struct PriorAssignmentsView: View {
                     return
                 }
                 
-                var tempGroupedAssignments: [String: [(String, String)]] = [:]
+                var tempGroupedAssignments: [String: [(String, String, Timestamp)]] = [:]
                 
                 for document in documents {
                     let data = document.data()
@@ -72,7 +73,7 @@ struct PriorAssignmentsView: View {
                         
                         if let groupId = data["groupId"] as? String {
                             print("📌 Found assignment: \(assignmentId), Due: \(dueDate), Group: \(groupId)")
-                            tempGroupedAssignments[dueDate, default: []].append((assignmentId, groupId))
+                            tempGroupedAssignments[dueDate, default: []].append((assignmentId, groupId, dueDateTimestamp))
                         }
                     }
                 }
@@ -85,13 +86,17 @@ struct PriorAssignmentsView: View {
 
 struct AssignmentDetailView: View {
     let assignmentId: String
-    @State private var responses: [String: [Int]] = [:] // [athleteId: [responseTimes]]
+    let groupId: String
+    @State private var responses: [String: [Int]] = [:] // [athleteName: [responseTimes]]
+    @State private var reps: [String] = [] // Reps array for column headers
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var groupName: String?
+    @State private var dueDate: String?
 
     var body: some View {
         VStack {
-            Text("Responses for Assignment ID: \(assignmentId)")
+            Text("Responses for Group: \(groupName ?? "Loading...") - Due: \(dueDate ?? "Loading...")")
                 .font(.title)
                 .padding()
 
@@ -106,7 +111,7 @@ struct AssignmentDetailView: View {
             }
 
             ScrollView(.horizontal) {
-                TableView(responses: responses)
+                TableView(responses: responses, reps: reps)
             }
 
             Button(action: fetchResponses) {
@@ -139,54 +144,91 @@ struct AssignmentDetailView: View {
 
             guard let assignmentData = doc?.data(),
                   let athleteIds = assignmentData["athleteIds"] as? [String], // Array of athlete IDs
-                  let responsesData = assignmentData["responses"] as? [String: [Int]] else {
+                  let responsesData = assignmentData["responses"] as? [String: [Int]], // Athlete response data
+                  let reps = assignmentData["reps"] as? [String] else { // Get the reps array
                 DispatchQueue.main.async {
-                    self.errorMessage = "No responses found in assignment."
+                    self.errorMessage = "No responses or reps found in assignment."
                     self.isLoading = false
                 }
                 return
             }
 
-            // Using athleteIds to filter responses
-            var tempResponses: [String: [Int]] = [:]
-
-            for athleteId in athleteIds {
-                // Check if athleteId exists in responses and add it
-                if let responseTimes = responsesData[athleteId] {
-                    tempResponses[athleteId] = responseTimes
+            // Fetch the group based on the groupId (name value in the groups collection)
+            db.collection("groups").whereField("name", isEqualTo: groupId).getDocuments { (groupSnapshot, error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        self.errorMessage = "Error fetching group: \(error.localizedDescription)"
+                        self.isLoading = false
+                    }
+                    return
                 }
-            }
 
-            DispatchQueue.main.async {
-                self.responses = tempResponses
-                self.isLoading = false
+                guard let groupDocument = groupSnapshot?.documents.first,
+                      let members = groupDocument.data()["members"] as? [String: String] else {
+                    DispatchQueue.main.async {
+                        self.errorMessage = "No members found in group."
+                        self.isLoading = false
+                    }
+                    return
+                }
+
+                // Store the group name
+                self.groupName = groupDocument.data()["name"] as? String
+
+                // Convert dueDate timestamp to a readable string
+                if let dueDateTimestamp = assignmentData["dueDate"] as? Timestamp {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateStyle = .medium
+                    dateFormatter.timeStyle = .none
+                    self.dueDate = dateFormatter.string(from: dueDateTimestamp.dateValue())
+                }
+
+                // Now construct the responses with athlete names
+                var tempResponses: [String: [Int]] = [:]
+                for athleteId in athleteIds {
+                    // Check if athleteId exists in responses and add it
+                    if let responseTimes = responsesData[athleteId] {
+                        // Replace athleteId with the athlete's name from the members map
+                        let athleteName = members[athleteId] ?? athleteId // Default to athleteId if name is not found
+                        tempResponses[athleteName] = responseTimes
+                    }
+                }
+
+                DispatchQueue.main.async {
+                    self.responses = tempResponses
+                    self.reps = reps // Store the reps array for column headers
+                    self.isLoading = false
+                }
             }
         }
     }
 }
 
 struct TableView: View {
-    let responses: [String: [Int]] // [athleteId: [responseTimes]]
+    let responses: [String: [Int]] // [athleteName: [responseTimes]]
+    let reps: [String] // The reps array for column headers
 
     var body: some View {
         VStack {
+            // Column headers: Athlete Name and Reps values
             HStack {
-                Text("Athlete ID")
+                Text("Athlete Name")
                     .bold()
-                    .frame(width: 100, alignment: .leading)
-                ForEach(Array(responses.values.first ?? []), id: \.self) { _ in
-                    Text("Time")
+                    .frame(width: 150, alignment: .leading)
+                ForEach(reps, id: \.self) { rep in
+                    Text(rep)
                         .bold()
                         .frame(width: 60)
                 }
             }
             Divider()
 
-            ForEach(responses.keys.sorted(), id: \.self) { athleteId in
+            // Athlete responses rows
+            ForEach(responses.keys.sorted(), id: \.self) { athleteName in
                 HStack {
-                    Text(athleteId)
-                        .frame(width: 100, alignment: .leading)
-                    ForEach(responses[athleteId] ?? [], id: \.self) { time in
+                    Text(athleteName)
+                        .frame(width: 150, alignment: .leading)
+                    ForEach(responses[athleteName] ?? [], id: \.self) { time in
                         Text("\(time)")
                             .frame(width: 60)
                     }
