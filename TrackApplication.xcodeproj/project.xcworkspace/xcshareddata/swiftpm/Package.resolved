@@ -1,5 +1,5 @@
 {
-  "originHash" : "7ed78cec4688813732ed048994a6c24c5c081e333197fce4007040cea0ee7d0c",
+  "originHash" : "eb1bda53edc363feedba8b6da85c6cd316940c969cd8c332888e5738a50d5e01",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "2e02253fd1ce99145bcbf1bb367ccf61bd0ca46b",
         "version" : "11.6.0"
+      }
+    },
+    {
+      "identity" : "google-api-objectivec-client-for-rest?utm_source=chatgpt.com",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/google-api-objectivec-client-for-rest?utm_source=chatgpt.com",
+      "state" : {
+        "branch" : "main",
+        "revision" : "708fb13705592387cac69d688ade1f665d6ab37b"
       }
     },
     {

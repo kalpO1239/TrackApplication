@@ -207,33 +207,89 @@ struct AssignmentDetailView: View {
 struct TableView: View {
     let responses: [String: [Int]] // [athleteName: [responseTimes]]
     let reps: [String] // The reps array for column headers
-
+    @State private var sortColumnIndex: Int? = nil
+    @State private var sortAscending: Bool = true
+    
+    var sortedAthletes: [String] {
+        guard let columnIndex = sortColumnIndex else {
+            return responses.keys.sorted()
+        }
+        
+        if columnIndex == -1 { // Athlete Name column
+            return responses.keys.sorted { sortAscending ? $0 < $1 : $0 > $1 }
+        }
+        
+        // For time columns
+        return responses.keys.sorted { athlete1, athlete2 in
+            let time1 = responses[athlete1]?[safe: columnIndex] ?? Int.max
+            let time2 = responses[athlete2]?[safe: columnIndex] ?? Int.max
+            return sortAscending ? time1 < time2 : time1 > time2
+        }
+    }
+    
     var body: some View {
         VStack {
             // Column headers: Athlete Name and Reps values
             HStack {
-                Text("Athlete Name")
-                    .bold()
-                    .frame(width: 150, alignment: .leading)
-                ForEach(reps, id: \.self) { rep in
-                    Text(rep)
-                        .bold()
-                        .frame(width: 60)
+                Button(action: { toggleSort(-1) }) { // -1 represents Athlete Name column
+                    HStack {
+                        Text("Athlete Name")
+                            .bold()
+                        if sortColumnIndex == -1 {
+                            Image(systemName: sortAscending ? "arrow.up" : "arrow.down")
+                        }
+                    }
+                }
+                .frame(width: 150, alignment: .leading)
+                
+                // Display reps as column headers in their original order
+                ForEach(reps.indices, id: \.self) { index in
+                    Button(action: { toggleSort(index) }) {
+                        HStack {
+                            Text(reps[index])
+                                .bold()
+                            if sortColumnIndex == index {
+                                Image(systemName: sortAscending ? "arrow.up" : "arrow.down")
+                            }
+                        }
+                    }
+                    .frame(width: 60)
                 }
             }
             Divider()
 
             // Athlete responses rows
-            ForEach(responses.keys.sorted(), id: \.self) { athleteName in
+            ForEach(sortedAthletes, id: \.self) { athleteName in
                 HStack {
                     Text(athleteName)
                         .frame(width: 150, alignment: .leading)
-                    ForEach(responses[athleteName] ?? [], id: \.self) { time in
-                        Text("\(time)")
-                            .frame(width: 60)
+                    
+                    // Display response times for each rep in order
+                    ForEach(reps.indices, id: \.self) { index in
+                        if let times = responses[athleteName] {
+                            Text("\(times[safe: index] ?? 0)")
+                                .frame(width: 60)
+                        }
                     }
                 }
             }
         }
     }
+    
+    private func toggleSort(_ columnIndex: Int) {
+        if sortColumnIndex == columnIndex {
+            sortAscending.toggle()
+        } else {
+            sortColumnIndex = columnIndex
+            sortAscending = true
+        }
+    }
 }
+
+// Helper extension for safe array indexing
+extension Array {
+    subscript(safe index: Int) -> Element? {
+        return index >= 0 && index < count ? self[index] : nil
+    }
+}
+
