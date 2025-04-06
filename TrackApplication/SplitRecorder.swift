@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 import Firebase
 import FirebaseAuth
@@ -9,6 +7,7 @@ struct SplitRecorder: View {
     @State private var inputs: [String] = []
     @State private var groupId: String?
     @State private var assignmentId: String?
+    @EnvironmentObject var workoutDataManager: WorkoutDataManager
     
     var body: some View {
         VStack(spacing: 20) {
@@ -78,38 +77,94 @@ struct SplitRecorder: View {
                 return
             }
             
-            guard let data = doc?.data(), let groups = data["groups"] as? [String], let firstGroup = groups.first else {
+            guard let data = doc?.data(), let groups = data["groups"] as? [String] else {
                 print("No groups found.")
                 return
             }
             
-            self.groupId = firstGroup
+            // Function to check if a group has an unresponded assignment
+            func checkGroupForUnrespondedAssignment(groupId: String, completion: @escaping (Bool, String?) -> Void) {
+                let assignmentsRef = db.collection("assignments")
+                assignmentsRef.whereField("groupId", isEqualTo: groupId)
+                    .whereField("athleteIds", arrayContains: userId)
+                    .order(by: "dueDate", descending: true)
+                    .getDocuments { (snapshot, error) in
+                        if let error = error {
+                            print("Error checking assignments for group \(groupId): \(error.localizedDescription)")
+                            completion(false, nil)
+                            return
+                        }
+                        
+                        guard let documents = snapshot?.documents, !documents.isEmpty else {
+                            completion(false, nil)
+                            return
+                        }
+                        
+                        // Check each assignment in the group
+                        for document in documents {
+                            let assignmentData = document.data()
+                            
+                            // Check if user is in the athleteIds array
+                            guard let athleteIds = assignmentData["athleteIds"] as? [String],
+                                  athleteIds.contains(userId) else {
+                                continue
+                            }
+                            
+                            let responses = assignmentData["responses"] as? [String: [Int]] ?? [:]
+                            
+                            // If user hasn't responded to this assignment, we found one
+                            if !responses.keys.contains(userId) {
+                                completion(true, document.documentID)
+                                return
+                            }
+                        }
+                        
+                        // No unresponded assignments found in this group
+                        completion(false, nil)
+                    }
+            }
             
-
-            // Fetch the latest assignment for this group where athleteIds contains the userId
-            let assignmentsRef = db.collection("assignments")
-            assignmentsRef.whereField("groupId", isEqualTo: firstGroup)
-                .whereField("athleteIds", arrayContains: userId)
-                .order(by: "dueDate", descending: true) // Fetch latest assignment
-                .limit(to: 1)
-                .getDocuments { (snapshot, error) in
-                    if let error = error {
-                        print("Error fetching assignments: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    guard let assignmentDoc = snapshot?.documents.first else {
-                        print("No assignments found.")
-                        return
-                    }
-                    
-                    let assignmentData = assignmentDoc.data()
-                    if let repsArray = assignmentData["reps"] as? [String] {
-                        self.assignment = repsArray
-                        self.inputs = Array(repeating: "", count: repsArray.count)
-                        self.assignmentId = assignmentDoc.documentID
+            // Check each group in sequence until we find one with an unresponded assignment
+            func checkNextGroup(index: Int) {
+                guard index < groups.count else {
+                    print("No unresponded assignments found in any group.")
+                    return
+                }
+                
+                let groupId = groups[index]
+                checkGroupForUnrespondedAssignment(groupId: groupId) { hasUnresponded, assignmentId in
+                    if hasUnresponded, let assignmentId = assignmentId {
+                        // Found a group with an unresponded assignment
+                        self.groupId = groupId
+                        self.assignmentId = assignmentId
+                        
+                        // Fetch the assignment details
+                        let assignmentRef = db.collection("assignments").document(assignmentId)
+                        assignmentRef.getDocument { (doc, error) in
+                            if let error = error {
+                                print("Error fetching assignment: \(error.localizedDescription)")
+                                return
+                            }
+                            
+                            guard let assignmentData = doc?.data() else {
+                                print("No assignment data found.")
+                                return
+                            }
+                            
+                            if let repsArray = assignmentData["reps"] as? [String] {
+                                self.assignment = repsArray
+                                self.inputs = Array(repeating: "", count: repsArray.count)
+                            }
+                        }
+                    } else {
+                        // Check the next group
+                        checkNextGroup(index: index + 1)
                     }
                 }
+            }
+            
+            // Start checking from the first group
+            checkNextGroup(index: 0)
         }
     }
 
@@ -125,13 +180,87 @@ struct SplitRecorder: View {
         let db = Firestore.firestore()
         let assignmentRef = db.collection("assignments").document(assignmentId)
         
+        // First, update the assignment with the responses
         assignmentRef.updateData([
             "responses.\(userId)": parsedInputs
         ]) { error in
             if let error = error {
                 print("Error submitting responses: \(error.localizedDescription)")
+                return
+            }
+            
+            print("Responses successfully submitted to assignment.")
+            
+            // Now, also store in the workouts collection
+            self.storeInWorkoutsCollection(db: db, userId: userId, assignmentId: assignmentId, responses: parsedInputs)
+        }
+    }
+    
+    /// **Stores the workout data in the workouts collection.**
+    private func storeInWorkoutsCollection(db: Firestore, userId: String, assignmentId: String, responses: [Int]) {
+        // Get the assignment details to extract reps (distances)
+        let assignmentRef = db.collection("assignments").document(assignmentId)
+        assignmentRef.getDocument { (doc, error) in
+            if let error = error {
+                print("Error fetching assignment for workout storage: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let assignmentData = doc?.data(),
+                  let reps = assignmentData["reps"] as? [String] else {
+                print("No reps data found in assignment.")
+                return
+            }
+            
+            // Calculate total distance in meters
+            var totalMeters = 0
+            for rep in reps {
+                // Extract the numeric value from the rep string (e.g., "400m" -> 400)
+                if let meterValue = Int(rep.filter { $0.isNumber }) {
+                    totalMeters += meterValue
+                }
+            }
+            
+            // Convert meters to miles (1 mile = 1609.34 meters)
+            let miles = Double(totalMeters) / 1609.34
+            
+            // Calculate total time in minutes
+            let totalSeconds = responses.reduce(0, +)
+            let timeInMinutes = totalSeconds / 60
+            
+            // Determine title based on time of day
+            let hour = Calendar.current.component(.hour, from: Date())
+            let title: String
+            if hour < 12 {
+                title = "Morning Run"
+            } else if hour < 17 {
+                title = "Afternoon Run"
             } else {
-                print("Responses successfully submitted.")
+                title = "Evening Run"
+            }
+            
+            // Create workout data
+            let workoutData: [String: Any] = [
+                "date": Timestamp(date: Date()),
+                "miles": miles,
+                "title": title,
+                "timeInMinutes": timeInMinutes,
+                "userId": userId,
+                "assignmentId": assignmentId
+            ]
+            
+            // Add to workouts collection
+            db.collection("workouts").addDocument(data: workoutData) { error in
+                if let error = error {
+                    print("Error adding workout: \(error.localizedDescription)")
+                } else {
+                    print("Workout successfully added to workouts collection!")
+                    
+                    // Refresh the workout data to update the graph
+                    DispatchQueue.main.async {
+                        self.workoutDataManager.fetchWorkoutsForUser()
+                    }
+                }
             }
         }
     }

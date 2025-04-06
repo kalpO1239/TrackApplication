@@ -13,12 +13,7 @@ struct GroupDetailView: View {
     
     var body: some View {
         TabView {
-            StudentCatalogView()
-                .tabItem {
-                    Image(systemName: "person.3.fill")
-                    Text("Students")
-                    
-                }
+           
             
             
             AssignmentCreationView()
