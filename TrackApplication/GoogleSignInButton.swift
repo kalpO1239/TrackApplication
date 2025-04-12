@@ -15,7 +15,7 @@ struct GoogleSignInButton: View {
     var body: some View {
         Button(action: action) {
             HStack {
-                Image("googleLogo") // Add a Google logo to your Assets folder
+                Image("image-removebg-preview") // Add a Google logo to your Assets folder
                     .resizable()
                     .frame(width: 20, height: 20)
 

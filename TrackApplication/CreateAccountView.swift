@@ -15,72 +15,110 @@ struct CreateAccountView: View {
     @State private var password: String = ""
     @State private var errorMessage: String?
     @State private var isUserLoggedIn = false
-
+    
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "person.crop.circle.fill.badge.plus")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 50, height: 50)
-                .foregroundColor(.gray)
-                .padding(.bottom, 20)
-
-            Text("Create Your Account")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.bottom, 20)
-
-            TextField("First Name", text: $firstName)
-                .padding()
-                .border(Color.gray, width: 1)
-                .cornerRadius(8)
-
-            TextField("Last Name", text: $lastName)
-                .padding()
-                .border(Color.gray, width: 1)
-                .cornerRadius(8)
-
-            TextField("Email", text: $email)
-                .padding()
-                .keyboardType(.emailAddress)
-                .autocapitalization(.none)
-                .border(Color.gray, width: 1)
-                .cornerRadius(8)
-
-            SecureField("Password", text: $password)
-                .padding()
-                .border(Color.gray, width: 1)
-                .cornerRadius(8)
-
-            if let errorMessage = errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .padding(.bottom, 20)
-            }
-
-            Button(action: createAccount) {
-                Text("Create Account")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding(.top, 20)
-
-            NavigationLink(destination: HomeView(), isActive: $isUserLoggedIn) {
-                EmptyView()
+        NavigationView {
+            ZStack {
+                ModernBackground()
+                
+                ScrollView {
+                    VStack(spacing: 25) {
+                        // Back Button
+                        HStack {
+                            Button(action: navigateBack) {
+                                HStack {
+                                    Image(systemName: "arrow.left")
+                                    Text("Back")
+                                }
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                                .padding()
+                            }
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        
+                        // App Logo
+                        VStack(spacing: 15) {
+                            Image("Runlytics")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 150, height: 150)
+                                .padding(.bottom, 20)
+                            
+                            Text("Create Account")
+                                .font(.system(size: 32, weight: .bold, design: .rounded))
+                                .foregroundColor(Color(hex: "#433F4E"))
+                            
+                            Text("Join us today")
+                                .font(.subheadline)
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                        }
+                        .padding(.top, 40)
+                        .padding(.bottom, 20)
+                        
+                        // Input fields
+                        VStack(spacing: 20) {
+                            CustomTextField(iconName: "person", placeholder: "First Name", isSecure: false, text: $firstName)
+                            CustomTextField(iconName: "person", placeholder: "Last Name", isSecure: false, text: $lastName)
+                            CustomTextField(iconName: "envelope", placeholder: "Email", isSecure: false, text: $email)
+                            CustomTextField(iconName: "lock", placeholder: "Password", isSecure: true, text: $password)
+                        }
+                        .padding(.horizontal)
+                        
+                        if let errorMessage = errorMessage {
+                            Text(errorMessage)
+                                .font(.footnote)
+                                .foregroundColor(.red)
+                                .padding(.horizontal)
+                        }
+                        
+                        // Create Account Button
+                        Button(action: createAccount) {
+                            Text("Create Account")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    LinearGradient(
+                                        colors: [
+                                            Color(hex: "#5B5E73"),
+                                            Color(hex: "#433F4E")
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                        
+                        NavigationLink(destination: HomeView()
+                            .environmentObject(WorkoutDataManager.shared)
+                            .navigationBarBackButtonHidden(true),
+                                     isActive: $isUserLoggedIn) {
+                            EmptyView()
+                        }
+                    }
+                    .padding(.bottom, 40)
+                }
             }
         }
-        .padding()
     }
-
+    
+    func navigateBack() {
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = UIHostingController(rootView: RoleSelectionView())
+            window.makeKeyAndVisible()
+        }
+    }
+    
     func createAccount() {
         guard !firstName.isEmpty, !lastName.isEmpty else {
             errorMessage = "Please fill in all fields."
             return
         }
-
+        
         FirebaseAuthManager.shared.createAccount(email: email, password: password) { result, error in
             if let error = error {
                 errorMessage = "Account creation failed: \(error.localizedDescription)"
@@ -91,6 +129,6 @@ struct CreateAccountView: View {
     }
 }
 
-#Preview{
+#Preview {
     CreateAccountView()
 }
