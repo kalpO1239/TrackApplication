@@ -51,7 +51,6 @@
 		9B32DDF02D261073006A7918 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */; };
 		9B32DDF32D261073006A7918 /* TrackApplicationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDDC2D261073006A7918 /* TrackApplicationApp.swift */; };
 		9B32DDF42D261073006A7918 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD82D261073006A7918 /* LogViewController.swift */; };
-		9B32DDF52D261073006A7918 /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */; };
 		9B7ECAFA2D85DE5000C6AC87 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7ECAF92D85DE5000C6AC87 /* ActivityLogView.swift */; };
 		9B7ECAFE2D87616700C6AC87 /* GroupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7ECAFD2D87616700C6AC87 /* GroupManager.swift */; };
 		9B7ECB022D8763C600C6AC87 /* CreateGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7ECB012D8763C600C6AC87 /* CreateGroupView.swift */; };
@@ -115,7 +114,6 @@
 		9B32DDCE2D261073006A7918 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		9B32DDD02D261073006A7918 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInButton.swift; sourceTree = "<group>"; };
 		9B32DDD42D261073006A7918 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 		9B32DDD52D261073006A7918 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9B32DDD72D261073006A7918 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
@@ -287,7 +285,6 @@
 				9B32DDCE2D261073006A7918 /* DashboardView.swift */,
 				9B32DDCF2D261073006A7918 /* FirebaseAuthManager.swift */,
 				9B32DDD02D261073006A7918 /* GoogleService-Info.plist */,
-				9B32DDD12D261073006A7918 /* GoogleSignInButton.swift */,
 				9B32DDD42D261073006A7918 /* GroupDetailView.swift */,
 				9B32DDD52D261073006A7918 /* HomeView.swift */,
 				9B32DDD72D261073006A7918 /* LogView.swift */,
@@ -521,7 +518,6 @@
 				9B32DDF02D261073006A7918 /* FirebaseAuthManager.swift in Sources */,
 				9B32DDF32D261073006A7918 /* TrackApplicationApp.swift in Sources */,
 				9B32DDF42D261073006A7918 /* LogViewController.swift in Sources */,
-				9B32DDF52D261073006A7918 /* GoogleSignInButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
