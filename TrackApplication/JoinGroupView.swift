@@ -13,39 +13,101 @@ struct JoinGroupView: View {
     @State private var joinCode: String = ""
     @State private var userName: String = ""
     @State private var errorMessage: String?
+    @State private var isSuccess = false
     @EnvironmentObject var groupManager: GroupManager
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        VStack {
-            Text("Join a Group")
-                .font(.title)
-                .padding()
-            
-            TextField("Enter Your Name", text: $userName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            TextField("Enter Group Code", text: $joinCode)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            if let errorMessage = errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .padding()
+        GeometryReader { geometry in
+            ZStack {
+                ModernBackground()
+                
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Back Button
+                        HStack {
+                            Button(action: {
+                                presentationMode.wrappedValue.dismiss()
+                            }) {
+                                HStack {
+                                    Image(systemName: "arrow.left")
+                                    Text("Back")
+                                }
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                                .padding()
+                            }
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        
+                        Text("Join a Group")
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .foregroundColor(Color(hex: "#433F4E"))
+                            .padding(.top, 20)
+                        
+                        // Name Input
+                        VStack(alignment: .leading) {
+                            Text("Your Name")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                            
+                            TextField("Enter your name", text: $userName)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 12)
+                                .background(Color(hex: "#ECE3DF").opacity(0.5))
+                                .cornerRadius(8)
+                        }
+                        .padding(.horizontal)
+                        
+                        // Group Code Input
+                        VStack(alignment: .leading) {
+                            Text("Group Code")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                            
+                            TextField("Enter group code", text: $joinCode)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 12)
+                                .background(Color(hex: "#ECE3DF").opacity(0.5))
+                                .cornerRadius(8)
+                        }
+                        .padding(.horizontal)
+                        
+                        if let errorMessage = errorMessage {
+                            Text(errorMessage)
+                                .font(.system(size: 14, weight: .medium, design: .rounded))
+                                .foregroundColor(.red)
+                                .padding()
+                        }
+                        
+                        Button(action: joinGroup) {
+                            Text("Join Group")
+                                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    LinearGradient(
+                                        colors: [
+                                            Color(hex: "#5B5E73"),
+                                            Color(hex: "#433F4E")
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .foregroundColor(.white)
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical)
+                    .frame(minHeight: geometry.size.height)
+                }
             }
-            
-            Button(action: {
-                joinGroup()
-            }) {
-                Text("Join Group")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            }
+            .navigationBarHidden(true)
         }
-        .padding()
     }
     
     func joinGroup() {
@@ -83,8 +145,8 @@ struct JoinGroupView: View {
 
             // Add user to the group
             groupRef.updateData([
-                "members.\(userId)": userName, // Store userId as key and name as value
-                "athleteIds": FieldValue.arrayUnion([userId]) // Store userId in athleteIds array
+                "members.\(userId)": userName,
+                "athleteIds": FieldValue.arrayUnion([userId])
             ]) { error in
                 if let error = error {
                     errorMessage = "Error joining group: \(error.localizedDescription)"
@@ -108,7 +170,8 @@ struct JoinGroupView: View {
                             if let error = error {
                                 errorMessage = "Error updating orgs: \(error.localizedDescription)"
                             } else {
-                                errorMessage = nil // Successfully updated existing orgs
+                                isSuccess = true
+                                presentationMode.wrappedValue.dismiss()
                             }
                         }
                     } else {
@@ -119,7 +182,8 @@ struct JoinGroupView: View {
                             if let error = error {
                                 errorMessage = "Error creating orgs: \(error.localizedDescription)"
                             } else {
-                                errorMessage = nil // Successfully created new orgs document
+                                isSuccess = true
+                                presentationMode.wrappedValue.dismiss()
                             }
                         }
                     }
@@ -127,8 +191,6 @@ struct JoinGroupView: View {
             }
         }
     }
-
-
 }
 
 struct JoinGroupView_Previews: PreviewProvider {

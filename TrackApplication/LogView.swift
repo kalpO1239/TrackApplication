@@ -48,7 +48,7 @@ struct LogView: View {
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .foregroundColor(Color(hex: "#5B5E73"))
                             
-                            TextEditor(text: $description)
+                            TextField("Enter Workout Description",text: $description)
                                 .frame(height: 100)
                                 .padding(4)
                                 .background(Color(hex: "#ECE3DF").opacity(0.5))
