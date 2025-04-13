@@ -3,9 +3,6 @@ import FirebaseAuth
 
 struct LogView: View {
     @EnvironmentObject var workoutDataManager: WorkoutDataManager
-    @State private var selectedWorkoutType: String = "Workouts"
-    let workoutTypes = ["Workouts", "Personal"]
-    
     @State private var title: String = ""
     @State private var description: String = ""
     @State private var leftMiles: Int = 0
@@ -26,161 +23,172 @@ struct LogView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            ScrollView {
-                VStack(spacing: 20) {
-                    
-                    // Workout Type Selector
-                    Picker("Workout Type", selection: $selectedWorkoutType) {
-                        ForEach(workoutTypes, id: \.self) { type in
-                            Text(type).tag(type)
+            ZStack {
+                ModernBackground()
+                
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Title Input
+                        VStack(alignment: .leading) {
+                            Text("Title")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                            
+                            TextField("Enter workout title", text: $title)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 12)
+                                .background(Color(hex: "#ECE3DF").opacity(0.5))
+                                .cornerRadius(8)
                         }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding(.horizontal)
-                    
-                    // Distance Input (Full Width)
-                    VStack {
-                        Text("Distance")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
                         
-                        HStack {
-                            Picker("", selection: $leftMiles) {
-                                ForEach(0..<31, id: \.self) { Text("\($0)") }
-                            }
-                            .pickerStyle(WheelPickerStyle())
-                            .frame(width: 70, height: 100)
+                        // Description Input
+                        VStack(alignment: .leading) {
+                            Text("Description")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(hex: "#5B5E73"))
                             
-                            Text(".")
-                                .font(.largeTitle)
-                            
-                            Picker("", selection: $rightMiles) {
-                                ForEach(0..<100, id: \.self) { Text(String(format: "%02d", $0)) }
-                            }
-                            .pickerStyle(WheelPickerStyle())
-                            .frame(width: 70, height: 100)
-                            
-                            Text("miles")
-                                .font(.headline)
-                                .foregroundColor(.gray)
+                            TextEditor(text: $description)
+                                .frame(height: 100)
+                                .padding(4)
+                                .background(Color(hex: "#ECE3DF").opacity(0.5))
+                                .cornerRadius(8)
                         }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                    
-                    // Time Input (Full Width)
-                    VStack {
-                        Text("Time")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
                         
-                        HStack {
-                            Picker("", selection: $selectedHours) {
-                                ForEach(0..<25, id: \.self) { Text(String(format: "%02d", $0)) }
+                        // Distance Input
+                        VStack(alignment: .leading) {
+                            Text("Distance")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                            
+                            HStack {
+                                Picker("", selection: $leftMiles) {
+                                    ForEach(0..<31, id: \.self) { Text("\($0)") }
+                                }
+                                .pickerStyle(WheelPickerStyle())
+                                .frame(width: 70, height: 100)
+                                
+                                Text(".")
+                                    .font(.largeTitle)
+                                
+                                Picker("", selection: $rightMiles) {
+                                    ForEach(0..<100, id: \.self) { Text(String(format: "%02d", $0)) }
+                                }
+                                .pickerStyle(WheelPickerStyle())
+                                .frame(width: 70, height: 100)
+                                
+                                Text("miles")
+                                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                                    .foregroundColor(Color(hex: "#5B5E73"))
                             }
-                            .pickerStyle(WheelPickerStyle())
-                            .frame(width: 70, height: 100)
-                            
-                            Text(":")
-                                .font(.largeTitle)
-                            
-                            Picker("", selection: $selectedMinutes) {
-                                ForEach(0..<60, id: \.self) { Text(String(format: "%02d", $0)) }
-                            }
-                            .pickerStyle(WheelPickerStyle())
-                            .frame(width: 70, height: 100)
-                            
-                            Text(":")
-                                .font(.largeTitle)
-                            
-                            Picker("", selection: $selectedSeconds) {
-                                ForEach(0..<60, id: \.self) { Text(String(format: "%02d", $0)) }
-                            }
-                            .pickerStyle(WheelPickerStyle())
-                            .frame(width: 70, height: 100)
-                        }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                    
-                    // Date Selection (Full Width)
-                    VStack(alignment: .leading) {
-                        Text("Date")
-                            .font(.headline)
-                        
-                        Text(formattedDate)
-                            .foregroundColor(.gray)
-                            .padding(.bottom, 5)
-                        
-                        DisclosureGroup("Select Date", isExpanded: $isDatePickerExpanded) {
-                            DatePicker("", selection: $date, displayedComponents: .date)
-                                .datePickerStyle(GraphicalDatePickerStyle())
-                                .padding(.vertical, 5)
                         }
                         .padding()
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(10)
-                    }
-                    .padding(.horizontal)
-                    
-                    // Title & Notes
-                    VStack(alignment: .leading) {
-                        Text("Title")
-                            .font(.headline)
-                        TextField("Enter title", text: $title)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .background(Color(hex: "#ECE3DF").opacity(0.5))
+                        .cornerRadius(12)
+                        .padding(.horizontal)
                         
-                        Text("Description")
-                            .font(.headline)
-                            .padding(.top, 5)
-                        TextEditor(text: $description)
-                            .frame(height: 100)
-                            .border(Color.gray, width: 1)
-                            .cornerRadius(5)
-                    }
-                    .padding(.horizontal)
-                    
-                    // Submit Button
-                    Button(action: handleSubmit) {
-                        Text("Save")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
+                        // Time Input
+                        VStack(alignment: .leading) {
+                            Text("Time")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                            
+                            HStack {
+                                Picker("", selection: $selectedHours) {
+                                    ForEach(0..<25, id: \.self) { Text(String(format: "%02d", $0)) }
+                                }
+                                .pickerStyle(WheelPickerStyle())
+                                .frame(width: 70, height: 100)
+                                
+                                Text(":")
+                                    .font(.largeTitle)
+                                
+                                Picker("", selection: $selectedMinutes) {
+                                    ForEach(0..<60, id: \.self) { Text(String(format: "%02d", $0)) }
+                                }
+                                .pickerStyle(WheelPickerStyle())
+                                .frame(width: 70, height: 100)
+                                
+                                Text(":")
+                                    .font(.largeTitle)
+                                
+                                Picker("", selection: $selectedSeconds) {
+                                    ForEach(0..<60, id: \.self) { Text(String(format: "%02d", $0)) }
+                                }
+                                .pickerStyle(WheelPickerStyle())
+                                .frame(width: 70, height: 100)
+                            }
+                        }
+                        .padding()
+                        .background(Color(hex: "#ECE3DF").opacity(0.5))
+                        .cornerRadius(12)
+                        .padding(.horizontal)
+                        
+                        // Date Selection
+                        VStack(alignment: .leading) {
+                            Text("Date")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                            
+                            Text(formattedDate)
+                                .foregroundColor(Color(hex: "#433F4E"))
+                                .padding(.bottom, 5)
+                            
+                            DisclosureGroup("Select Date", isExpanded: $isDatePickerExpanded) {
+                                DatePicker("", selection: $date, displayedComponents: .date)
+                                    .datePickerStyle(GraphicalDatePickerStyle())
+                                    .padding(.vertical, 5)
+                            }
                             .padding()
-                            .background(Color.blue.opacity(0.6))
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                            .background(Color(hex: "#ECE3DF").opacity(0.5))
+                            .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                        
+                        // Submit Button
+                        Button(action: handleSubmit) {
+                            Text("Save")
+                                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    LinearGradient(
+                                        colors: [
+                                            Color(hex: "#5B5E73"),
+                                            Color(hex: "#433F4E")
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .foregroundColor(.white)
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                        
+                        Spacer()
                     }
-                    .padding(.horizontal)
-                    
-                    Spacer() // Ensures smooth scrolling
+                    .padding(.vertical)
+                    .frame(minHeight: geometry.size.height)
                 }
-                .padding(.vertical)
-                .frame(minHeight: geometry.size.height) // Ensures full scrollability
             }
+            .navigationTitle("Log Workout")
         }
     }
     
-    private func handleSubmit() {
-        let miles = Double(leftMiles) + Double(rightMiles) / 100.0
-        let totalTime = (selectedHours * 3600) + (selectedMinutes * 60) + selectedSeconds
-     
-        // Add workout to manager
-        if Auth.auth().currentUser == nil {
-            // Handle the case where the user is not logged in
-            // Present a login screen or an alert.  Don't proceed with adding workout
-            return
-        } else {
-            // Proceed with adding workout
-            workoutDataManager.addWorkout(date: date, miles: miles, title: title, timeInMinutes: totalTime)
-        }
+    func handleSubmit() {
+        let totalMiles = Double(leftMiles) + Double(rightMiles) / 100.0
+        let totalTimeInMinutes = selectedHours * 60 + selectedMinutes + selectedSeconds / 60
         
-        // Navigate back to home view
+        workoutDataManager.addWorkout(
+            date: date,
+            miles: totalMiles,
+            title: title,
+            timeInMinutes: totalTimeInMinutes,
+            description: description
+        )
+        
         presentationMode.wrappedValue.dismiss()
     }
 }

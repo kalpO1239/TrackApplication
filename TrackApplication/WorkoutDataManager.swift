@@ -14,7 +14,7 @@ class WorkoutDataManager: ObservableObject {
           self.db = db
       }
     // Updates the workout data and weekly mileage
-    func addWorkout(date: Date, miles: Double, title: String, timeInMinutes: Int) {
+    func addWorkout(date: Date, miles: Double, title: String, timeInMinutes: Int, description: String = "") {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("No user logged in")
             return
@@ -25,7 +25,8 @@ class WorkoutDataManager: ObservableObject {
             "miles": miles,
             "title": title,
             "timeInMinutes": timeInMinutes,
-            "userId": userId
+            "userId": userId,
+            "description": description
         ]
 
         db.collection("workouts").addDocument(data: workoutData) { error in
@@ -119,6 +120,7 @@ struct WorkoutEntry: Identifiable, Codable, Equatable {
     var title: String
     var timeInMinutes: Int
     var userId: String  // Include userId so Firestore can store it
+    var description: String  // New field for workout description
 
     static func == (lhs: WorkoutEntry, rhs: WorkoutEntry) -> Bool {
         return lhs.id == rhs.id

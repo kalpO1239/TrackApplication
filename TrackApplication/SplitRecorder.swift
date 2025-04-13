@@ -215,7 +215,6 @@ struct SplitRecorder: View {
             // Calculate total distance in meters
             var totalMeters = 0
             for rep in reps {
-                // Extract the numeric value from the rep string (e.g., "400m" -> 400)
                 if let meterValue = Int(rep.filter { $0.isNumber }) {
                     totalMeters += meterValue
                 }
@@ -227,6 +226,13 @@ struct SplitRecorder: View {
             // Calculate total time in minutes
             let totalSeconds = responses.reduce(0, +)
             let timeInMinutes = totalSeconds / 60
+            
+            // Create description in format rep1:time1,...,repn:timen
+            let description = zip(reps, responses).map { rep, time in
+                let minutes = time / 60
+                let seconds = time % 60
+                return "\(rep) - \(String(format: "%02d:%02d", minutes, seconds))"
+            }.joined(separator: ",")
             
             // Determine title based on time of day
             let hour = Calendar.current.component(.hour, from: Date())
@@ -246,7 +252,8 @@ struct SplitRecorder: View {
                 "title": title,
                 "timeInMinutes": timeInMinutes,
                 "userId": userId,
-                "assignmentId": assignmentId
+                "assignmentId": assignmentId,
+                "description": description
             ]
             
             // Add to workouts collection
