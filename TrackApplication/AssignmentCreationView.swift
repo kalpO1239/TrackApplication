@@ -72,7 +72,6 @@ struct AssignmentCreationView: View {
                     .cornerRadius(10)
             }
         }
-        .navigationTitle("Create Assignment")
         .onAppear(perform: fetchCoachId) // Fetch coach's ID on load
     }
 
@@ -120,9 +119,6 @@ struct AssignmentCreationView: View {
             }
     }
 
-
-
-
     /// Create an assignment
     private func createAssignment() {
         guard !inputGroupName.isEmpty else {
@@ -162,8 +158,6 @@ struct AssignmentCreationView: View {
             }
         }
     }
-
-
 }
 
 #Preview {

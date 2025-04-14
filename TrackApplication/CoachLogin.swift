@@ -125,7 +125,8 @@ struct CoachLogin: View {
                         
                         NavigationLink(destination: GroupDetailView(groupName: "base")
                             .environmentObject(authManager)
-                            .environmentObject(groupManager),
+                            .environmentObject(groupManager)
+                            .navigationBarBackButtonHidden(true),
                                      isActive: $isUserLoggedIn) {
                             EmptyView()
                         }

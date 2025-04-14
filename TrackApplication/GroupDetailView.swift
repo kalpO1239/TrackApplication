@@ -13,9 +13,6 @@ struct GroupDetailView: View {
     
     var body: some View {
         TabView {
-           
-            
-            
             AssignmentCreationView()
                 .tabItem {
                     Image(systemName: "square.and.pencil")
@@ -32,7 +29,6 @@ struct GroupDetailView: View {
                     Image(systemName: "person.2.fill")
                     Text("Group")
                 }
-                .navigationTitle(groupName)
         }
     }
 }
