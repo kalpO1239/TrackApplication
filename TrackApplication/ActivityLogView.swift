@@ -10,26 +10,33 @@ import SwiftUI
 
 struct ActivityLogView: View {
     @EnvironmentObject var workoutDataManager: WorkoutDataManager
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                ModernBackground()
-                
-                ScrollView {
-                    VStack(spacing: 20) {
-                        ForEach(workoutDataManager.workoutData) { workout in
-                            workoutCard(workout: workout)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                }
-            }
+        ZStack {
+            ModernBackground()
             
-            .onAppear {
-                workoutDataManager.fetchWorkoutsForUser()
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Back button
+                    HStack {
+                        ModernBackButton(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        })
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    
+                    ForEach(workoutDataManager.workoutData) { workout in
+                        workoutCard(workout: workout)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
             }
+        }
+        .onAppear {
+            workoutDataManager.fetchWorkoutsForUser()
         }
     }
     

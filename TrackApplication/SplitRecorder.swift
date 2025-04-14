@@ -10,14 +10,31 @@ struct SplitRecorder: View {
     @State private var assignmentTitle: String = ""
     @State private var isLoading = false
     @EnvironmentObject var workoutDataManager: WorkoutDataManager
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 ModernBackground()
-                mainContent
+                
+                VStack(spacing: 20) {
+                    // Back button
+                    HStack {
+                        ModernBackButton(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        })
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    
+                    // Rest of the content
+                    groupTabs
+                    refreshButton
+                    contentView
+                    Spacer()
+                }
+                .padding(.vertical)
             }
-            .navigationTitle("Split Recorder")
             .onAppear {
                 fetchUserGroups()
             }

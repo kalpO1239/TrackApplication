@@ -123,7 +123,7 @@ struct CoachLogin: View {
                         ModernGoogleSignInButton(action: signInWithGoogle)
                             .padding(.horizontal)
                         
-                        NavigationLink(destination: GroupDetailView(groupName: "base")
+                        NavigationLink(destination: GroupDetailView(groupName: "")
                             .environmentObject(authManager)
                             .environmentObject(groupManager)
                             .navigationBarBackButtonHidden(true),

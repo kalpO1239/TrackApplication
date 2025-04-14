@@ -28,6 +28,15 @@ struct LogView: View {
                 
                 ScrollView {
                     VStack(spacing: 20) {
+                        // Back button
+                        HStack {
+                            ModernBackButton(action: {
+                                presentationMode.wrappedValue.dismiss()
+                            })
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        
                         // Title Input
                         VStack(alignment: .leading) {
                             Text("Title")
@@ -169,11 +178,9 @@ struct LogView: View {
                         
                         Spacer()
                     }
-                    .padding(.vertical)
-                    .frame(minHeight: geometry.size.height)
+                    .padding(.top, 20)
                 }
             }
-            .navigationTitle("Log Workout")
         }
     }
     

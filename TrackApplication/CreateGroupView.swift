@@ -18,6 +18,7 @@ struct CreateGroupView: View {
     @State private var selectedGroup: String = ""
     @State private var members: [String: String] = [:] // userId: userName
     @State private var isLoading = false
+    @State private var groupCode: String = ""
     
     var body: some View {
         GeometryReader { geometry in
@@ -87,6 +88,7 @@ struct CreateGroupView: View {
                                 Button(action: {
                                     selectedGroup = group
                                     fetchMembers(for: group)
+                                    fetchGroupCode(for: group)
                                 }) {
                                     Text(group)
                                         .font(.system(size: 16, weight: .medium, design: .rounded))
@@ -232,6 +234,15 @@ struct CreateGroupView: View {
     
     private var groupMembersContent: some View {
         VStack(spacing: 15) {
+            // Group Code Display
+            HStack {
+                Text("Group Code: \(groupCode)")
+                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                    .foregroundColor(Color(hex: "#5B5E73"))
+                Spacer()
+            }
+            .padding(.horizontal)
+            
             if isLoading {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
@@ -251,6 +262,16 @@ struct CreateGroupView: View {
                                     .font(.system(size: 16, weight: .medium, design: .rounded))
                                     .foregroundColor(Color(hex: "#433F4E"))
                                 Spacer()
+                                
+                                Button(action: {
+                                    removeStudent(userId: userId)
+                                }) {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.red)
+                                        .padding(8)
+                                        .background(Color(hex: "#ECE3DF").opacity(0.5))
+                                        .cornerRadius(8)
+                                }
                             }
                             .padding()
                             .background(Color(hex: "#ECE3DF").opacity(0.5))
@@ -284,9 +305,33 @@ struct CreateGroupView: View {
                     if !groupNames.isEmpty {
                         self.selectedGroup = groupNames[0]
                         self.fetchMembers(for: groupNames[0])
+                        self.fetchGroupCode(for: groupNames[0])
                     } else {
                         self.selectedGroup = "+"
                     }
+                }
+            }
+    }
+    
+    private func fetchGroupCode(for groupName: String) {
+        guard !groupName.isEmpty else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("groups")
+            .whereField("name", isEqualTo: groupName)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching group code: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let groupDoc = snapshot?.documents.first,
+                      let code = groupDoc.data()["code"] as? String else {
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.groupCode = code
                 }
             }
     }
@@ -318,6 +363,42 @@ struct CreateGroupView: View {
                 DispatchQueue.main.async {
                     self.members = filteredMembers
                     self.isLoading = false
+                }
+            }
+    }
+    
+    private func removeStudent(userId: String) {
+        guard !selectedGroup.isEmpty else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("groups")
+            .whereField("name", isEqualTo: selectedGroup)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error finding group: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let groupDoc = snapshot?.documents.first else {
+                    return
+                }
+                
+                let groupId = groupDoc.documentID
+                let groupRef = db.collection("groups").document(groupId)
+                
+                // Remove from athleteIds array
+                groupRef.updateData([
+                    "athleteIds": FieldValue.arrayRemove([userId]),
+                    "members.\(userId)": FieldValue.delete()
+                ]) { error in
+                    if let error = error {
+                        print("Error removing student: \(error.localizedDescription)")
+                    } else {
+                        // Update local state
+                        DispatchQueue.main.async {
+                            self.members.removeValue(forKey: userId)
+                        }
+                    }
                 }
             }
     }

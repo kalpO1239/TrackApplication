@@ -261,6 +261,7 @@ struct AssignmentDetailView: View {
     @State private var errorMessage: String?
     @State private var groupName: String?
     @State private var dueDate: String?
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         GeometryReader { geometry in
@@ -268,9 +269,15 @@ struct AssignmentDetailView: View {
                 ModernBackground()
                 
                 VStack(spacing: 20) {
-                    // Header with group info and reload button
+                    // Header with back button and group info
                     HStack {
-                        VStack(alignment: .leading, spacing: 4) {
+                        ModernBackButton(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        })
+                        
+                        Spacer()
+                        
+                        VStack(alignment: .trailing, spacing: 4) {
                             Text(groupName ?? "Loading...")
                                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                                 .foregroundColor(Color(hex: "#433F4E"))
@@ -279,37 +286,45 @@ struct AssignmentDetailView: View {
                                 .font(.system(size: 14, design: .rounded))
                                 .foregroundColor(Color(hex: "#5B5E73"))
                         }
-                        
-                        Spacer()
-                        
-                        Button(action: fetchResponses) {
+                    }
+                    .padding(.horizontal)
+                    
+                    // Refresh button
+                    Button(action: {
+                        fetchResponses()
+                    }) {
+                        HStack {
                             Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(Color(hex: "#433F4E"))
-                                .padding(8)
-                                .background(Color(hex: "#ECE3DF").opacity(0.5))
-                                .cornerRadius(8)
+                                .font(.system(size: 14, weight: .medium))
+                            Text("Refresh")
+                                .font(.system(size: 14, weight: .medium, design: .rounded))
                         }
-                        .disabled(isLoading)
+                        .foregroundColor(Color(hex: "#5B5E73"))
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 16)
+                        .background(Color(hex: "#ECE3DF").opacity(0.5))
+                        .cornerRadius(8)
                     }
                     .padding(.horizontal)
                     
                     if isLoading {
                         loadingView
-                    } else if let errorMessage = errorMessage {
-                        errorView(message: errorMessage)
-                    } else if responses.isEmpty {
-                        emptyStateView
+                    } else if let error = errorMessage {
+                        errorView(message: error)
                     } else {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            TableView(responses: responses, reps: reps)
-                        }
+                        TableView(
+                            responses: responses,
+                            reps: reps,
+                            groupName: groupName ?? "Loading..."
+                        )
                     }
                 }
-                .padding(.top, 20)
             }
         }
-        .onAppear(perform: fetchResponses)
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
+            fetchResponses()
+        }
     }
     
     private var loadingView: some View {
@@ -440,6 +455,7 @@ struct TableView: View {
     @State private var sortColumnIndex: Int? = nil
     @State private var sortAscending: Bool = true
     @State private var selectedAthlete: String? = nil
+    let groupName: String
     
     var sortedAthletes: [String] {
         guard let columnIndex = sortColumnIndex else {

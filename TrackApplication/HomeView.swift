@@ -10,14 +10,18 @@ struct HomeView: View {
     @State private var weekMileage: [Double] = Array(repeating: 0.0, count: 10)
     @State private var showPopup = false
     @State private var popupData: (date: Date, mileage: Double)? = nil
-
+    @State private var showLogView = false
+    @State private var showSplitRecorder = false
+    @State private var showActivityLog = false
+    @State private var showJoinGroup = false
+    
     var body: some View {
         NavigationView {
             ZStack {
                 ModernBackground()
                 mainContent
             }
-            .navigationTitle("Home")
+            
             .onAppear {
                 workoutDataManager.fetchWorkoutsForUser()
                 initializeWeeks()
@@ -29,6 +33,22 @@ struct HomeView: View {
                 if showPopup, let data = popupData {
                     PopupView(date: data.date, mileage: data.mileage, isPresented: $showPopup)
                 }
+            }
+            .sheet(isPresented: $showLogView) {
+                LogView()
+                    .environmentObject(workoutDataManager)
+            }
+            .sheet(isPresented: $showSplitRecorder) {
+                SplitRecorder()
+                    .environmentObject(workoutDataManager)
+            }
+            .sheet(isPresented: $showActivityLog) {
+                ActivityLogView()
+                    .environmentObject(workoutDataManager)
+            }
+            .sheet(isPresented: $showJoinGroup){
+                JoinGroupView()
+                    .environmentObject(workoutDataManager)
             }
         }
     }
@@ -53,12 +73,59 @@ struct HomeView: View {
     
     private var buttonStack: some View {
         VStack(spacing: 20) {
-            ActivityLogButton()
-            LogWorkoutButton()
-            JoinGroupViewButton()
-            SplitButton()
+            Button(action: { showActivityLog = true }) {
+                Text("Activity Log")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(buttonGradient)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+            }
+            
+            Button(action: { showLogView = true }) {
+                Text("Log Workout")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(buttonGradient)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+            }
+            
+            Button(action: { showSplitRecorder = true }) {
+                Text("Splits")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(buttonGradient)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+            }
+            
+            Button(action: { showJoinGroup = true }) {
+                Text("Join Group")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(buttonGradient)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+            }
+           
         }
         .padding(.horizontal, 20)
+    }
+    
+    private var buttonGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color(hex: "#5B5E73"),
+                Color(hex: "#433F4E")
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
     }
     
     func getMondayOfWeek(offset: Int) -> Date {
