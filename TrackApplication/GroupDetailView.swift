@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import FirebaseAuth
 
 struct GroupDetailView: View {
     let groupName: String
@@ -17,12 +18,31 @@ struct GroupDetailView: View {
                 ModernBackground()
                 
                 VStack(spacing: 0) {
-                    // Header
+                    // Header with group name and logout button
                     HStack {
                         Text(groupName)
                             .font(.system(size: 24, weight: .bold, design: .rounded))
                             .foregroundColor(Color(hex: "#433F4E"))
                         Spacer()
+                        Button(action: {
+                            do {
+                                try Auth.auth().signOut()
+                                // Navigate back to login page
+                                if let window = UIApplication.shared.windows.first {
+                                    window.rootViewController = UIHostingController(rootView: RoleSelectionView())
+                                    window.makeKeyAndVisible()
+                                }
+                            } catch {
+                                print("Error signing out: \(error.localizedDescription)")
+                            }
+                        }) {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                                .padding(8)
+                                .background(Color(hex: "#ECE3DF").opacity(0.5))
+                                .cornerRadius(8)
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.top, 20)
@@ -47,20 +67,17 @@ struct GroupDetailView: View {
                         
                         CreateGroupView()
                             .tabItem {
-                                Image(systemName: "person.2.fill")
+                                Image(systemName: "person.3.fill")
                                     .font(.system(size: 16, weight: .medium))
                                 Text("Group")
                                     .font(.system(size: 14, weight: .medium, design: .rounded))
                             }
                     }
-                    .accentColor(Color(hex: "#5B5E73"))
                     .onAppear {
-                        // Customize tab bar appearance
                         let appearance = UITabBarAppearance()
                         appearance.configureWithOpaqueBackground()
                         appearance.backgroundColor = UIColor(Color(hex: "#ECE3DF"))
                         
-                        // Apply the appearance
                         UITabBar.appearance().standardAppearance = appearance
                         UITabBar.appearance().scrollEdgeAppearance = appearance
                     }

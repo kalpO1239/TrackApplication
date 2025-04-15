@@ -1,5 +1,6 @@
 import SwiftUI
 import Charts
+import FirebaseAuth
 
 // MARK: - Main View
 struct HomeView: View {
@@ -19,7 +20,36 @@ struct HomeView: View {
         NavigationView {
             ZStack {
                 ModernBackground()
-                mainContent
+                
+                VStack {
+                    // Logout button
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            do {
+                                try Auth.auth().signOut()
+                                // Navigate back to login page
+                                if let window = UIApplication.shared.windows.first {
+                                    window.rootViewController = UIHostingController(rootView: RoleSelectionView())
+                                    window.makeKeyAndVisible()
+                                }
+                            } catch {
+                                print("Error signing out: \(error.localizedDescription)")
+                            }
+                        }) {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                                .padding(8)
+                                .background(Color(hex: "#ECE3DF").opacity(0.5))
+                                .cornerRadius(8)
+                        }
+                        .padding(.trailing)
+                    }
+                    .padding(.top, 20)
+                    
+                    mainContent
+                }
             }
             
             .onAppear {
