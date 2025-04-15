@@ -74,58 +74,102 @@ struct HomeView: View {
     private var buttonStack: some View {
         VStack(spacing: 20) {
             Button(action: { showActivityLog = true }) {
-                Text("Activity Log")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(buttonGradient)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+                HStack {
+                    Image(systemName: "list.bullet.clipboard")
+                        .font(.system(size: 20, weight: .medium))
+                    Text("Activity Log")
+                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    LinearGradient(
+                        colors: [
+                            Color(hex: "#5B5E73"),
+                            Color(hex: "#433F4E")
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             }
             
             Button(action: { showLogView = true }) {
-                Text("Log Workout")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(buttonGradient)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+                HStack {
+                    Image(systemName: "plus.circle")
+                        .font(.system(size: 20, weight: .medium))
+                    Text("Log Workout")
+                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    LinearGradient(
+                        colors: [
+                            Color(hex: "#5B5E73"),
+                            Color(hex: "#433F4E")
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             }
             
             Button(action: { showSplitRecorder = true }) {
-                Text("Splits")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(buttonGradient)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+                HStack {
+                    Image(systemName: "timer")
+                        .font(.system(size: 20, weight: .medium))
+                    Text("Splits")
+                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    LinearGradient(
+                        colors: [
+                            Color(hex: "#5B5E73"),
+                            Color(hex: "#433F4E")
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             }
             
             Button(action: { showJoinGroup = true }) {
-                Text("Join Group")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(buttonGradient)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+                HStack {
+                    Image(systemName: "person.2")
+                        .font(.system(size: 20, weight: .medium))
+                    Text("Join Group")
+                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    LinearGradient(
+                        colors: [
+                            Color(hex: "#5B5E73"),
+                            Color(hex: "#433F4E")
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             }
-           
         }
         .padding(.horizontal, 20)
-    }
-    
-    private var buttonGradient: LinearGradient {
-        LinearGradient(
-            colors: [
-                Color(hex: "#5B5E73"),
-                Color(hex: "#433F4E")
-            ],
-            startPoint: .leading,
-            endPoint: .trailing
-        )
     }
     
     func getMondayOfWeek(offset: Int) -> Date {
