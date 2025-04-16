@@ -145,10 +145,9 @@ struct LogView: View {
                                 .padding(.bottom, 5)
                             
                             DisclosureGroup("Select Date", isExpanded: $isDatePickerExpanded) {
-                                DatePicker("", selection: $date, displayedComponents: .date)
-                                    .datePickerStyle(GraphicalDatePickerStyle())
-                                    .padding(.vertical, 5)
+                                datePicker
                             }
+                            .foregroundStyle(Color(hex:"#433F4E"))
                             .padding()
                             .background(Color(hex: "#ECE3DF").opacity(0.5))
                             .cornerRadius(12)
@@ -182,6 +181,24 @@ struct LogView: View {
                 }
             }
         }
+    }
+    
+    private var datePicker: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Select Date")
+                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .foregroundColor(Color(hex: "#5B5E73"))
+            
+            DatePicker("", selection: $date, displayedComponents: .date)
+                .datePickerStyle(.graphical)
+                .accentColor(Color(hex: "#5B5E73"))
+                .background(Color(hex: "#ECE3DF").opacity(0.5))
+                .cornerRadius(12)
+                .padding()
+                .background(Color(hex: "#ECE3DF").opacity(0.5))
+                .cornerRadius(12)
+        }
+        .padding(.horizontal)
     }
     
     func handleSubmit() {

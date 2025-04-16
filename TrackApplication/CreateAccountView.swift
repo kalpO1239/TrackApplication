@@ -104,6 +104,7 @@ struct CreateAccountView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     func navigateBack() {
