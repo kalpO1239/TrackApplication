@@ -142,6 +142,12 @@ struct CreateGroupView: View {
                 .padding(.horizontal, 12)
                 .background(Color(hex: "#ECE3DF").opacity(0.5))
                 .cornerRadius(8)
+                .foregroundColor(Color(hex: "#5B5E73"))
+                .accentColor(Color(hex: "#5B5E73"))
+                .placeholder(when: groupName.isEmpty) {
+                    Text("Group Name")
+                        .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                }
                 .padding(.horizontal)
             
             HStack {
@@ -196,12 +202,17 @@ struct CreateGroupView: View {
     
     private var joinGroupContent: some View {
         VStack(spacing: 15) {
-            TextField("Join Code", text: $joinCode)
+            TextField("Enter group code", text: $joinCode)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 12)
                 .background(Color(hex: "#ECE3DF").opacity(0.5))
                 .cornerRadius(8)
-                .padding(.horizontal)
+                .foregroundColor(Color(hex: "#5B5E73"))
+                .accentColor(Color(hex: "#5B5E73"))
+                .placeholder(when: joinCode.isEmpty) {
+                    Text("Enter group code")
+                        .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                }
             
             Button(action: joinGroup) {
                 Text("Join Group")

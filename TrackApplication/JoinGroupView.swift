@@ -42,7 +42,7 @@ struct JoinGroupView: View {
                         
                         Text("Join a Group")
                             .font(.system(size: 24, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(hex: "#433F4E"))
+                            .foregroundColor(Color(hex: "#5B5E73"))
                             .padding(.top, 20)
                         
                         // Name Input
@@ -56,6 +56,12 @@ struct JoinGroupView: View {
                                 .padding(.horizontal, 12)
                                 .background(Color(hex: "#ECE3DF").opacity(0.5))
                                 .cornerRadius(8)
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .placeholder(when: userName.isEmpty) {
+                                    Text("Enter your name")
+                                        .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                                }
                         }
                         .padding(.horizontal)
                         
@@ -70,6 +76,12 @@ struct JoinGroupView: View {
                                 .padding(.horizontal, 12)
                                 .background(Color(hex: "#ECE3DF").opacity(0.5))
                                 .cornerRadius(8)
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .placeholder(when: joinCode.isEmpty) {
+                                    Text("Enter group code")
+                                        .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                                }
                         }
                         .padding(.horizontal)
                         
@@ -95,7 +107,7 @@ struct JoinGroupView: View {
                                         endPoint: .trailing
                                     )
                                 )
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "#ECE3DF"))
                                 .cornerRadius(12)
                         }
                         .padding(.horizontal)

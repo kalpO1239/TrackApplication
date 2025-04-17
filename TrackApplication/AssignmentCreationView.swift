@@ -71,12 +71,20 @@ struct AssignmentCreationView: View {
                                         .padding()
                                         .background(Color(hex: "#ECE3DF").opacity(0.5))
                                         .cornerRadius(8)
+                                        .foregroundColor(Color(hex: "#5B5E73"))
+                                        .accentColor(Color(hex: "#5B5E73"))
+                                        .placeholder(when: title.isEmpty) {
+                                            Text("Title")
+                                                .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                                        }
                                     
                                     DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
                                         .datePickerStyle(.compact)
                                         .padding()
                                         .background(Color(hex: "#ECE3DF").opacity(0.5))
                                         .cornerRadius(8)
+                                        .foregroundColor(Color(hex: "#5B5E73"))
+                                        .accentColor(Color(hex: "#5B5E73"))
                                 }
                                 .padding(.horizontal)
                                 
@@ -106,6 +114,12 @@ struct AssignmentCreationView: View {
                                                     .padding()
                                                     .background(Color(hex: "#ECE3DF").opacity(0.5))
                                                     .cornerRadius(8)
+                                                    .foregroundColor(Color(hex: "#5B5E73"))
+                                                    .accentColor(Color(hex: "#5B5E73"))
+                                                    .placeholder(when: assignmentFields[index].isEmpty) {
+                                                        Text("Enter rep")
+                                                            .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                                                    }
                                             } else {
                                                 Text(field)
                                                     .font(.system(size: 16, design: .rounded))
@@ -145,6 +159,7 @@ struct AssignmentCreationView: View {
                                         }
                                     ))
                                     .toggleStyle(SwitchToggleStyle(tint: Color(hex: "#5B5E73")))
+                                    .foregroundColor(Color(hex: "#5B5E73"))
                                     
                                     ForEach(students, id: \.self) { studentId in
                                         Toggle(studentMap[studentId] ?? "Unknown", isOn: Binding(
@@ -158,6 +173,7 @@ struct AssignmentCreationView: View {
                                             }
                                         ))
                                         .toggleStyle(SwitchToggleStyle(tint: Color(hex: "#5B5E73")))
+                                        .foregroundColor(Color(hex: "#5B5E73"))
                                     }
                                 }
                                 .padding(.horizontal)

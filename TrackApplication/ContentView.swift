@@ -16,12 +16,22 @@ struct CustomTextField: View {
             
             if isSecure {
                 SecureField(placeholder, text: $text)
-                    .foregroundColor(Color(hex: "#433F4E"))
+                    .foregroundColor(Color(hex: "#5B5E73"))
+                    .accentColor(Color(hex: "#5B5E73"))
+                    .placeholder(when: text.isEmpty) {
+                        Text(placeholder)
+                            .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                    }
             } else {
                 TextField(placeholder, text: $text)
                     .keyboardType(placeholder == "Email" ? .emailAddress : .default)
                     .autocapitalization(.none)
-                    .foregroundColor(Color(hex: "#433F4E"))
+                    .foregroundColor(Color(hex: "#5B5E73"))
+                    .accentColor(Color(hex: "#5B5E73"))
+                    .placeholder(when: text.isEmpty) {
+                        Text(placeholder)
+                            .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                    }
             }
         }
         .padding()
@@ -33,6 +43,20 @@ struct CustomTextField: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Color(hex: "#899ABE").opacity(0.3), lineWidth: 1)
         )
+    }
+}
+
+// Helper extension for placeholder
+extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content
+    ) -> some View {
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
     }
 }
 

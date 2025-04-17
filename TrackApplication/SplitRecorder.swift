@@ -158,11 +158,16 @@ struct SplitRecorder: View {
                 .foregroundColor(Color(hex: "#5B5E73"))
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            TextField("Enter value", text: $inputs[index])
-                .padding(.vertical, 8)
-                .padding(.horizontal, 12)
+            TextField("Enter split", text: $inputs[index])
+                .padding()
                 .background(Color(hex: "#ECE3DF").opacity(0.5))
                 .cornerRadius(8)
+                .foregroundColor(Color(hex: "#5B5E73"))
+                .accentColor(Color(hex: "#5B5E73"))
+                .placeholder(when: inputs[index].isEmpty) {
+                    Text("Enter split")
+                        .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                }
         }
         .padding(.horizontal)
     }

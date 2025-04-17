@@ -48,6 +48,12 @@ struct LogView: View {
                                 .padding(.horizontal, 12)
                                 .background(Color(hex: "#ECE3DF").opacity(0.5))
                                 .cornerRadius(8)
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .placeholder(when: title.isEmpty) {
+                                    Text("Enter workout title")
+                                        .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                                }
                         }
                         .padding(.horizontal)
                         
@@ -62,6 +68,12 @@ struct LogView: View {
                                 .padding(4)
                                 .background(Color(hex: "#ECE3DF").opacity(0.5))
                                 .cornerRadius(8)
+                                .foregroundColor(Color(hex: "#5B5E73"))
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .placeholder(when: description.isEmpty) {
+                                    Text("Enter Workout Description")
+                                        .foregroundColor(Color(hex: "#5B5E73").opacity(0.5))
+                                }
                         }
                         .padding(.horizontal)
                         
@@ -77,15 +89,20 @@ struct LogView: View {
                                 }
                                 .pickerStyle(WheelPickerStyle())
                                 .frame(width: 70, height: 100)
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .foregroundColor(Color(hex: "#5B5E73"))
                                 
                                 Text(".")
                                     .font(.largeTitle)
+                                    .foregroundColor(Color(hex: "#5B5E73"))
                                 
                                 Picker("", selection: $rightMiles) {
                                     ForEach(0..<100, id: \.self) { Text(String(format: "%02d", $0)) }
                                 }
                                 .pickerStyle(WheelPickerStyle())
                                 .frame(width: 70, height: 100)
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .foregroundColor(Color(hex: "#5B5E73"))
                                 
                                 Text("miles")
                                     .font(.system(size: 16, weight: .medium, design: .rounded))
@@ -109,24 +126,32 @@ struct LogView: View {
                                 }
                                 .pickerStyle(WheelPickerStyle())
                                 .frame(width: 70, height: 100)
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .foregroundColor(Color(hex: "#5B5E73"))
                                 
                                 Text(":")
                                     .font(.largeTitle)
+                                    .foregroundColor(Color(hex: "#5B5E73"))
                                 
                                 Picker("", selection: $selectedMinutes) {
                                     ForEach(0..<60, id: \.self) { Text(String(format: "%02d", $0)) }
                                 }
                                 .pickerStyle(WheelPickerStyle())
                                 .frame(width: 70, height: 100)
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .foregroundColor(Color(hex: "#5B5E73"))
                                 
                                 Text(":")
                                     .font(.largeTitle)
+                                    .foregroundColor(Color(hex: "#5B5E73"))
                                 
                                 Picker("", selection: $selectedSeconds) {
                                     ForEach(0..<60, id: \.self) { Text(String(format: "%02d", $0)) }
                                 }
                                 .pickerStyle(WheelPickerStyle())
                                 .frame(width: 70, height: 100)
+                                .accentColor(Color(hex: "#5B5E73"))
+                                .foregroundColor(Color(hex: "#5B5E73"))
                             }
                         }
                         .padding()
@@ -141,13 +166,13 @@ struct LogView: View {
                                 .foregroundColor(Color(hex: "#5B5E73"))
                             
                             Text(formattedDate)
-                                .foregroundColor(Color(hex: "#433F4E"))
+                                .foregroundColor(Color(hex: "#5B5E73"))
                                 .padding(.bottom, 5)
                             
                             DisclosureGroup("Select Date", isExpanded: $isDatePickerExpanded) {
                                 datePicker
                             }
-                            .foregroundStyle(Color(hex:"#433F4E"))
+                            .foregroundStyle(Color(hex: "#5B5E73"))
                             .padding()
                             .background(Color(hex: "#ECE3DF").opacity(0.5))
                             .cornerRadius(12)
@@ -170,7 +195,7 @@ struct LogView: View {
                                         endPoint: .trailing
                                     )
                                 )
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "#ECE3DF"))
                                 .cornerRadius(12)
                         }
                         .padding(.horizontal)
@@ -192,6 +217,7 @@ struct LogView: View {
             DatePicker("", selection: $date, displayedComponents: .date)
                 .datePickerStyle(.graphical)
                 .accentColor(Color(hex: "#5B5E73"))
+                .foregroundColor(Color(hex: "#5B5E73"))
                 .background(Color(hex: "#ECE3DF").opacity(0.5))
                 .cornerRadius(12)
                 .padding()
